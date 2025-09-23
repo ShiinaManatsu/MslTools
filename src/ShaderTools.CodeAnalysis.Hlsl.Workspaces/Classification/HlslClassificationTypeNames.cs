@@ -21,5 +21,6 @@
         public const string MacroIdentifier = "Hlsl.Macro";
         public const string ToggleIdentifier = "Hlsl.Toggle";
         public const string AnnotationIdentifier = "Hlsl.AnnotationIdentifier";
+        public const string PropertyIdentifier = "Hlsl.PropertyIdentifier";
     }
 }

@@ -92,10 +92,12 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Classification
 
         public override void VisitAnnotations(AnnotationsSyntax node)
         {
+            var index = 0;
             foreach (var annotation in node.Annotations)
             {
-                CreateTag(annotation.Declaration.Variables.First().Identifier,HlslClassificationTypeNames.AnnotationIdentifier);
-            }            
+                CreateTag(annotation.Declaration.Variables.First().Identifier, $"{HlslClassificationTypeNames.AnnotationIdentifier}_{index}");
+                index++;
+            }
             base.VisitAnnotations(node);
         }
 
@@ -109,16 +111,16 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Classification
         {
             foreach (var statePropertySyntax in node.Properties)
             {
-                CreateTag(statePropertySyntax.Name,HlslClassificationTypeNames.AnnotationIdentifier);
-            }            
-            
+                CreateTag(statePropertySyntax.Name, HlslClassificationTypeNames.PropertyIdentifier);
+            }
+
             base.VisitStateInitializer(node);
         }
 
         public override void VisitSamplerStateInitializer(SamplerStateInitializerSyntax node)
         {
             VisitStateInitializer(node.StateInitializer);
-            
+
             base.VisitSamplerStateInitializer(node);
         }
 
@@ -272,7 +274,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Classification
                 case SymbolKind.Interface:
                     return HlslClassificationTypeNames.InterfaceIdentifier;
                 case SymbolKind.TypeAlias:
-                    return GetClassificationType(((TypeAliasSymbol) symbol).ValueType);
+                    return GetClassificationType(((TypeAliasSymbol)symbol).ValueType);
                 case SymbolKind.Function:
                     return HlslClassificationTypeNames.FunctionIdentifier;
                 default:

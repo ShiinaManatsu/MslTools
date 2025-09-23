@@ -51,12 +51,8 @@ namespace ShaderTools.LanguageServer.Handlers
         {
             var document = workspace.GetDocument(request.Uri);
             var ast = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
-
             var sm = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) as SemanticModel;
-
-
             var result = new TextureRegisterResponse() { Textures = new List<TextureRegisterItem>() };
-
             foreach (var declaration in sm.GetTextures())
             {
                 var name = declaration.Identifier.Text;

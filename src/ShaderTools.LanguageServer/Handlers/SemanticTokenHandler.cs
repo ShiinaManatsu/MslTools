@@ -24,12 +24,6 @@ namespace ShaderTools.LanguageServer.Handlers
 {
     internal class SemanticTokenHandler : SemanticTokensHandlerBase
     {
-        static SemanticTokensRegistrationOptions _options = new SemanticTokensRegistrationOptions
-        {
-            Full = new SemanticTokensCapabilityRequestFull(),
-            Legend = new SemanticTokensLegend()
-        };
-
         static class HlslClassificationTypeNames
         {
             public const string Punctuation = "Hlsl.Punctuation";
@@ -51,45 +45,73 @@ namespace ShaderTools.LanguageServer.Handlers
             public const string MacroIdentifier = "Hlsl.Macro";
             public const string ToggleIdentifier = "Hlsl.Toggle";
             public const string AnnotationIdentifier = "Hlsl.AnnotationIdentifier";
+            public const string PropertyIdentifier = "Hlsl.PropertyIdentifier";
         }
 
-        public static readonly Dictionary<string, SemanticTokenType> ClassificationMapping =
-            new()
+        public static readonly SemanticTokenModifier ModifierLocal = new SemanticTokenModifier("local");
+        public static readonly SemanticTokenModifier ModifierGlobal = new SemanticTokenModifier("global");
+        public static readonly SemanticTokenModifier ModifierField = new SemanticTokenModifier("field");
+        public static readonly SemanticTokenType TokenAnnotation = new SemanticTokenType("annotation");
+
+        public static readonly List<SemanticTokenModifier> AnnotationColors = new() {
+            new SemanticTokenModifier("colorRed"),
+            new SemanticTokenModifier("colorBlue"),
+            new SemanticTokenModifier("colorGreen"),
+            new SemanticTokenModifier("colorYellow"),
+            new SemanticTokenModifier("colorPurple"),
+            new SemanticTokenModifier("colorOrange"),
+            new SemanticTokenModifier("colorCyan"),
+            new SemanticTokenModifier("colorPink"),
+            new SemanticTokenModifier("colorBrown"),
+        };
+
+        static SemanticTokensRegistrationOptions _options = new SemanticTokensRegistrationOptions
+        {
+            Full = new SemanticTokensCapabilityRequestFull(),
+            Legend = new SemanticTokensLegend()
             {
-                {
-                    HlslClassificationTypeNames.MacroIdentifier, SemanticTokenType.Macro
-                }
-            };
+                TokenModifiers = new Container<SemanticTokenModifier>(SemanticTokenModifier.Defaults
+                    .Concat(AnnotationColors)
+                    .Concat([ModifierLocal, ModifierGlobal, ModifierField])
+                ),
+                TokenTypes = new Container<SemanticTokenType>(SemanticTokenType.Defaults.Append(TokenAnnotation))
+            }
+        };
+
+        public static int annoationColorSpinIndex = 0;
 
         public static (SemanticTokenType, List<SemanticTokenModifier>) GetClassificationType(
             string classificationTypeNames) => classificationTypeNames switch
             {
                 HlslClassificationTypeNames.Punctuation => (SemanticTokenType.Label, []),
-                HlslClassificationTypeNames.Semantic => (SemanticTokenType.Interface, [SemanticTokenModifier.Readonly]),
-                HlslClassificationTypeNames.PackOffset => (SemanticTokenType.EnumMember, [SemanticTokenModifier.Readonly]),
-                HlslClassificationTypeNames.RegisterLocation => (SemanticTokenType.EnumMember,
-                    [SemanticTokenModifier.Readonly]),
+                HlslClassificationTypeNames.Semantic => (SemanticTokenType.Interface, []),
+                HlslClassificationTypeNames.PackOffset => (SemanticTokenType.EnumMember, []),
+                HlslClassificationTypeNames.RegisterLocation => (SemanticTokenType.EnumMember, []),
                 HlslClassificationTypeNames.NamespaceIdentifier => (SemanticTokenType.Namespace, []),
-                HlslClassificationTypeNames.GlobalVariableIdentifier => (SemanticTokenType.Property,
-                    [SemanticTokenModifier.Declaration]),
-                HlslClassificationTypeNames.FieldIdentifier => (SemanticTokenType.Variable,
-                    [SemanticTokenModifier.Readonly]),
-                HlslClassificationTypeNames.LocalVariableIdentifier => (SemanticTokenType.Variable,
-                    [SemanticTokenModifier.Modification]),
-                HlslClassificationTypeNames.ParameterIdentifier => (SemanticTokenType.Parameter,
-                    [SemanticTokenModifier.Modification]),
-                HlslClassificationTypeNames.FunctionIdentifier => (SemanticTokenType.Function,
-                    [SemanticTokenModifier.Readonly]),
+                HlslClassificationTypeNames.GlobalVariableIdentifier => (SemanticTokenType.Variable, [ModifierGlobal]),
+                HlslClassificationTypeNames.FieldIdentifier => (SemanticTokenType.Variable, [ModifierField]),
+                HlslClassificationTypeNames.LocalVariableIdentifier => (SemanticTokenType.Variable, []),
+                HlslClassificationTypeNames.ParameterIdentifier => (SemanticTokenType.Parameter, []),
+                HlslClassificationTypeNames.FunctionIdentifier => (SemanticTokenType.Function, []),
                 HlslClassificationTypeNames.MethodIdentifier => (SemanticTokenType.Function, []),
                 HlslClassificationTypeNames.ClassIdentifier => (SemanticTokenType.Class, []),
                 HlslClassificationTypeNames.StructIdentifier => (SemanticTokenType.Struct, []),
                 HlslClassificationTypeNames.InterfaceIdentifier => (SemanticTokenType.Interface, []),
-                HlslClassificationTypeNames.ConstantBufferVariableIdentifier => (SemanticTokenType.Variable,
-                    [SemanticTokenModifier.Declaration]),
+                HlslClassificationTypeNames.ConstantBufferVariableIdentifier => (SemanticTokenType.Variable, [ModifierGlobal]),
                 HlslClassificationTypeNames.ConstantBufferIdentifier => (SemanticTokenType.Class, []),
                 HlslClassificationTypeNames.MacroIdentifier => (SemanticTokenType.Macro, []),
                 HlslClassificationTypeNames.ToggleIdentifier => (SemanticTokenType.Macro, []),
-                HlslClassificationTypeNames.AnnotationIdentifier => (SemanticTokenType.Keyword, []),
+                HlslClassificationTypeNames.AnnotationIdentifier => (TokenAnnotation, [AnnotationColors[(annoationColorSpinIndex++) % AnnotationColors.Count]]),
+                "Hlsl.AnnotationIdentifier_0" => (TokenAnnotation, [AnnotationColors[0]]),
+                "Hlsl.AnnotationIdentifier_1" => (TokenAnnotation, [AnnotationColors[1]]),
+                "Hlsl.AnnotationIdentifier_2" => (TokenAnnotation, [AnnotationColors[2]]),
+                "Hlsl.AnnotationIdentifier_3" => (TokenAnnotation, [AnnotationColors[3]]),
+                "Hlsl.AnnotationIdentifier_4" => (TokenAnnotation, [AnnotationColors[4]]),
+                "Hlsl.AnnotationIdentifier_5" => (TokenAnnotation, [AnnotationColors[5]]),
+                "Hlsl.AnnotationIdentifier_6" => (TokenAnnotation, [AnnotationColors[6]]),
+                "Hlsl.AnnotationIdentifier_7" => (TokenAnnotation, [AnnotationColors[7]]),
+                "Hlsl.AnnotationIdentifier_8" => (TokenAnnotation, [AnnotationColors[8]]),
+                HlslClassificationTypeNames.PropertyIdentifier => (SemanticTokenType.Property, []),
                 _ => (SemanticTokenType.Label, [])
             };
 
@@ -105,7 +127,7 @@ namespace ShaderTools.LanguageServer.Handlers
             CancellationToken cancellationToken)
         {
             var document = _workspace.GetDocument(identifier.TextDocument.Uri);
-            var ast = await document.GetSyntaxTreeAsync(cancellationToken);
+            var ast = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
             var classificationService = document?.LanguageServices.GetService<IClassificationService>();
 
             if (classificationService == null)
@@ -124,18 +146,20 @@ namespace ShaderTools.LanguageServer.Handlers
                 classifiedSpans,
                 cancellationToken);
 
-            foreach (var classifiedSpan in classifiedSpans)
+
+            foreach (var x in classifiedSpans.DistinctBy(x => x.TextSpan).OrderBy(x => x.TextSpan.Start))
             {
-                if (classifiedSpan.ClassificationType == ClassificationTypeNames.WhiteSpace)
+                var content = document.SourceText.GetSubText(x.TextSpan).ToString();
+                if (content.Contains(" "))
                 {
                     continue;
                 }
-
-                var range = Helpers.ToRange(document.SourceText, classifiedSpan.TextSpan);
-                var content = document.SourceText.GetSubText(classifiedSpan.TextSpan).ToString();
-                var (semanticTokenType, semanticTokenModifiers) =
-                    GetClassificationType(classifiedSpan.ClassificationType);
-                builder.Push(range, semanticTokenType, semanticTokenModifiers);
+                if (x.ClassificationType != ClassificationTypeNames.WhiteSpace)
+                {
+                    var range = Helpers.ToRange(document.SourceText, x.TextSpan);
+                    var (semanticTokenType, semanticTokenModifiers) = GetClassificationType(x.ClassificationType);
+                    builder.Push(range, semanticTokenType, semanticTokenModifiers);
+                }
             }
         }
 
