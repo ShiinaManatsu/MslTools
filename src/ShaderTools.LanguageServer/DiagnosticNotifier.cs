@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
@@ -48,7 +49,20 @@ namespace ShaderTools.LanguageServer
                 ? await _diagnosticService.GetDiagnosticsAsync(document.Id, CancellationToken.None)
                 : ImmutableArray<MappedDiagnostic>.Empty;
 
+            var reportScope = await _server.Configuration.GetConfiguration([new ConfigurationItem { Section = "hlsl-client" }]).ConfigureAwait(false);
+
+            var activeFileOnly = false;
+            try
+            {
+                if (reportScope.AsEnumerable().ToDictionary()["hlsl-client:diagnostic:reportScope"] == "active")
+                {
+                    activeFileOnly = true;
+                }
+            }
+            catch { }
+
             var diagnosticsGroupedByFile = diagnostics
+                .Where(x => x.FileSpan.File.FilePath == document.FilePath || !activeFileOnly)
                 .GroupBy(x => x.FileSpan.File.FilePath)
                 .ToDictionary(x => Helpers.ToUri(x.Key), x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToArray());
 
