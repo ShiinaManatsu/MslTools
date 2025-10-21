@@ -20,4 +20,7 @@
     <ProjectReference Include="..\ShaderTools.CodeAnalysis.ShaderLab.Features\ShaderTools.CodeAnalysis.ShaderLab.Features.csproj" />
     <ProjectReference Include="..\ShaderTools.CodeAnalysis.ShaderLab.Workspaces\ShaderTools.CodeAnalysis.ShaderLab.Workspaces.csproj" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Release (&#xD;&#xA;    xcopy &quot;$(TargetDir)*.*&quot; &quot;D:\TSProjects\messiahsldevhelper\bin\Release\win-x64\&quot; /Y /I /E&#xD;&#xA;    echo Release build has copied to code extension&#xD;&#xA;)" />
+  </Target>
 </Project>
