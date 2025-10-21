@@ -95,8 +95,15 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Classification
             var index = 0;
             foreach (var annotation in node.Annotations)
             {
-                CreateTag(annotation.Declaration.Variables.First().Identifier, $"{HlslClassificationTypeNames.AnnotationIdentifier}_{index}");
-                index++;
+                var highlightNode = annotation.Declaration.Variables.First().Identifier;
+                if (highlightNode.MacroReference != null)
+                {
+                    CreateTag(highlightNode.MacroReference.NameToken, $"{HlslClassificationTypeNames.AnnotationIdentifier}_{index++}");
+                }
+                else
+                {
+                    CreateTag(highlightNode, $"{HlslClassificationTypeNames.AnnotationIdentifier}_{index++}");
+                }
             }
             base.VisitAnnotations(node);
         }
