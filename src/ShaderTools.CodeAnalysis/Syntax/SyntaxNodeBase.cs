@@ -135,6 +135,8 @@ namespace ShaderTools.CodeAnalysis.Syntax
 
         public virtual IEnumerable<Diagnostic> GetDiagnostics()
         {
+            if (GetType().Name == "TechniqueSyntax")
+                return [];
             return Diagnostics.Union(ChildNodes.SelectMany(x => x.GetDiagnostics()));
         }
 

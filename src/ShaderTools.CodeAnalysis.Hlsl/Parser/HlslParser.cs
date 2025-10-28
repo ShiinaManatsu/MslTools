@@ -417,8 +417,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
                     case SyntaxKind.TechniqueKeyword:
                     case SyntaxKind.Technique10Keyword:
                     case SyntaxKind.Technique11Keyword:
-                        var tech = ParseTechnique();
-                        //declarations.Add();
+                        declarations.Add(ParseTechnique());
                         break;
                     case SyntaxKind.SemiToken:
                         declarations.Add(new EmptyStatementSyntax(new List<AttributeDeclarationSyntaxBase>(), NextToken()));

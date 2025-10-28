@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml.Linq;
 using Microsoft.CodeAnalysis.Text;
@@ -326,38 +325,26 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             var openBrace = Match(SyntaxKind.OpenBraceToken);
 
             var passes = new List<PassSyntax>();
-
-            if (Current.Kind == SyntaxKind.PassKeyword)
+            while (Current.Kind != SyntaxKind.CloseBraceToken)
             {
-                while (Current.Kind != SyntaxKind.CloseBraceToken)
+                if (Current.Kind == SyntaxKind.PassKeyword)
                 {
-                    if (Current.Kind == SyntaxKind.PassKeyword)
-                    {
-                        passes.Add(ParsePass());
-                    }
-                    else
-                    {
-                        var action = SkipBadTokens(
-                            p => p.Current.Kind != SyntaxKind.PassKeyword,
-                            p => p.IsTerminator(),
-                            SyntaxKind.CloseBraceToken);
-                        if (action == PostSkipAction.Abort)
-                            break;
-                    }
+                    passes.Add(ParsePass());
                 }
-            }
-            else
-            {
-                SkipBadTokens(
-                    p => p.Current.Kind != SyntaxKind.CloseBraceToken,
-                    p => p.Current.Kind == SyntaxKind.CloseBraceToken,
-                    SyntaxKind.CloseBraceToken);
+                else
+                {
+                    var action = SkipBadTokens(
+                        p => p.Current.Kind != SyntaxKind.PassKeyword,
+                        p => p.IsTerminator(),
+                        SyntaxKind.CloseBraceToken);
+                    if (action == PostSkipAction.Abort)
+                        break;
+                }
             }
 
             var closeBrace = Match(SyntaxKind.CloseBraceToken);
             var semicolon = NextTokenIf(SyntaxKind.SemiToken);
 
-            return null;
             return new TechniqueSyntax(technique, name, annotations, openBrace, passes, closeBrace, semicolon);
         }
 
