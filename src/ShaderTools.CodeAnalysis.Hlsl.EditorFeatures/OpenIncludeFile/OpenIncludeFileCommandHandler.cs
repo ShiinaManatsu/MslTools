@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.Commanding;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
-using ShaderTools.CodeAnalysis.Editor.Commands;
 using ShaderTools.CodeAnalysis.Editor.Shared.Extensions;
 using ShaderTools.CodeAnalysis.Hlsl;
 using ShaderTools.CodeAnalysis.Hlsl.LanguageServices;
@@ -15,6 +14,7 @@ using ShaderTools.CodeAnalysis.Hlsl.Text;
 using ShaderTools.CodeAnalysis.Navigation;
 using ShaderTools.CodeAnalysis.Notification;
 using ShaderTools.CodeAnalysis.Text;
+using ShaderTools.CodeAnalysis.Editor.Commands;
 
 namespace ShaderTools.CodeAnalysis.Editor.Hlsl.OpenIncludeFile
 {

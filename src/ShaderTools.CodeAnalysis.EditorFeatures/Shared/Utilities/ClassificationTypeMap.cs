@@ -26,7 +26,7 @@ namespace ShaderTools.CodeAnalysis.Editor.Shared.Utilities
 
             // Prepopulate the identity map with the constant string values from ClassificationTypeNames
             var fields = typeof(ClassificationTypeNames).GetFields();
-            _identityMap = new Dictionary<string, IClassificationType>(fields.Length, ReferenceEqualityComparer.Instance);
+            _identityMap = new Dictionary<string, IClassificationType>(fields.Length, ShaderTools.Utilities.Collections.ReferenceEqualityComparer.Instance);
             foreach (var field in fields)
             {
                 var value = (string) field.GetValue(null);

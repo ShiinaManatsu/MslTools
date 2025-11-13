@@ -1,38 +1,55 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <RootNamespace>ShaderTools.CodeAnalysis.Editor</RootNamespace>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0-windows10.0.22000.0</TargetFramework>
+		<RootNamespace>ShaderTools.CodeAnalysis.Editor</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.Xaml" />
-    <Reference Include="WindowsBase" />
-    <PackageReference Include="Microsoft.VisualStudio.SDK" Version="16.9.31025.194" />
-  </ItemGroup>
+	<ItemGroup>
+	  <COMReference Include="{d37e2a3e-8545-3a39-9f4f-31827c9124ab}">
+	    <WrapperTool>tlbimp</WrapperTool>
+	    <VersionMinor>0</VersionMinor>
+	    <VersionMajor>2</VersionMajor>
+	    <Guid>d37e2a3e-8545-3a39-9f4f-31827c9124ab</Guid>
+	  </COMReference>
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ShaderTools.CodeAnalysis.EditorFeatures.Text\ShaderTools.CodeAnalysis.EditorFeatures.Text.csproj" />
-    <ProjectReference Include="..\ShaderTools.CodeAnalysis.Features\ShaderTools.CodeAnalysis.Features.csproj" />
-    <ProjectReference Include="..\ShaderTools.CodeAnalysis.Workspaces.Desktop\ShaderTools.CodeAnalysis.Workspaces.Desktop.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.VisualStudio.ImageCatalog" Version="17.14.40260" />
+	  <PackageReference Include="Microsoft.VisualStudio.Language" Version="17.14.249" />
+	  <PackageReference Include="Microsoft.VisualStudio.Language.Intellisense" Version="17.14.249" />
+	  <PackageReference Include="Microsoft.VisualStudio.Language.NavigateTo.Interfaces" Version="17.14.249" />
+	  <PackageReference Include="Microsoft.VisualStudio.Language.StandardClassification" Version="17.14.249" />
+	  <PackageReference Include="Microsoft.VisualStudio.Text.UI" Version="17.14.249" />
+	  <PackageReference Include="Microsoft.VisualStudio.Text.UI.Wpf" Version="17.14.249" />
+	  <PackageReference Include="System.Drawing.Common" Version="10.0.0" />
+	  <PackageReference Include="System.Net.Http" Version="4.3.4" />
+	  <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Compile Update="Properties\EditorFeaturesResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>EditorFeaturesResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
+	<ItemGroup>
+		<Reference Include="System.ComponentModel.Composition" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\EditorFeaturesResources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EditorFeaturesResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\ShaderTools.CodeAnalysis.EditorFeatures.Text\ShaderTools.CodeAnalysis.EditorFeatures.Text.csproj" />
+		<ProjectReference Include="..\ShaderTools.CodeAnalysis.Features\ShaderTools.CodeAnalysis.Features.csproj" />
+		<ProjectReference Include="..\ShaderTools.CodeAnalysis.Workspaces.Desktop\ShaderTools.CodeAnalysis.Workspaces.Desktop.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Update="Properties\EditorFeaturesResources.Designer.cs">
+			<DesignTime>True</DesignTime>
+			<AutoGen>True</AutoGen>
+			<DependentUpon>EditorFeaturesResources.resx</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Update="Properties\EditorFeaturesResources.resx">
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>EditorFeaturesResources.Designer.cs</LastGenOutput>
+		</EmbeddedResource>
+	</ItemGroup>
 
 </Project>

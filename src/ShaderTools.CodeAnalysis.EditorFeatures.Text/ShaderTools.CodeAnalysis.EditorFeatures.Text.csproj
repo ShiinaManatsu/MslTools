@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+	  <TargetFramework>net9.0-windows10.0.22000.0</TargetFramework>
     <RootNamespace>ShaderTools.CodeAnalysis.Text</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Text.Logic" Version="16.9.227" />
+    <PackageReference Include="Microsoft.VisualStudio.Text.Logic" Version="17.14.249" />
     <ProjectReference Include="..\ShaderTools.CodeAnalysis.Workspaces\ShaderTools.CodeAnalysis.Workspaces.csproj" />
     <ProjectReference Include="..\ShaderTools.CodeAnalysis\ShaderTools.CodeAnalysis.csproj" />
     <ProjectReference Include="..\ShaderTools.Utilities\ShaderTools.Utilities.csproj" />

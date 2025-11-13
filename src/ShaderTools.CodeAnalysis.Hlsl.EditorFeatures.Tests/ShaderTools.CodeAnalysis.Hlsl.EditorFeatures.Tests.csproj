@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <RootNamespace>ShaderTools.CodeAnalysis.Editor.Hlsl.Tests</RootNamespace>
-  </PropertyGroup>
 
-  <ItemGroup>
-	<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-	<PackageReference Include="xunit" Version="2.4.1" />
-	<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net9.0-windows10.0.22000.0</TargetFramework>
+		<RootNamespace>ShaderTools.CodeAnalysis.Editor.Hlsl.Tests</RootNamespace>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ShaderTools.CodeAnalysis.Hlsl.EditorFeatures\ShaderTools.CodeAnalysis.Hlsl.EditorFeatures.csproj" />
-    <ProjectReference Include="..\ShaderTools.CodeAnalysis.Workspaces\ShaderTools.CodeAnalysis.Workspaces.csproj" />
-    <ProjectReference Include="..\ShaderTools.Testing\ShaderTools.Testing.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Include="xunit" Version="2.4.1" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
-  </ItemGroup>
-  
+	<ItemGroup>
+		<ProjectReference Include="..\ShaderTools.CodeAnalysis.Hlsl.EditorFeatures\ShaderTools.CodeAnalysis.Hlsl.EditorFeatures.csproj" />
+		<ProjectReference Include="..\ShaderTools.CodeAnalysis.Workspaces\ShaderTools.CodeAnalysis.Workspaces.csproj" />
+		<ProjectReference Include="..\ShaderTools.Testing\ShaderTools.Testing.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
+	</ItemGroup>
+
 </Project>
