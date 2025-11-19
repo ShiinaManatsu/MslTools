@@ -264,10 +264,18 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
                 ? (BinaryOperatorKind?)SyntaxFacts.GetBinaryOperatorKind(node.Kind)
                 : null;
 
-            return new BoundAssignmentExpression(
+            var expression = new BoundAssignmentExpression(
                 Bind(node.Left, BindExpression),
                 operatorKind,
                 Bind(node.Right, BindExpression));
+
+            var convesion = Conversion.Classify(expression.Right.Type, expression.Left.Type, ParameterDirection.In);
+            if (convesion.ImplicitConversionType.IsImplicitNarrowing() || convesion.ImplicitConversionType.HasFlag(ConversionTypes.FloatTruncation))
+            {
+                Diagnostics.ReportImplicitTruncation(node.SourceRange, expression.Right.Type, expression.Left.Type);
+            }
+
+            return expression;
         }
 
         private static BoundExpression BindLiteralExpression(LiteralExpressionSyntax node)
@@ -285,6 +293,10 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
                         case SyntaxKind.CharacterLiteralToken:
                             return new BoundLiteralExpression(node, IntrinsicTypes.Int);
                         case SyntaxKind.FloatLiteralToken:
+                            if (node.Token.Text.EndsWith("h"))
+                            {
+                                return new BoundLiteralExpression(node, IntrinsicTypes.Half);
+                            }
                             return new BoundLiteralExpression(node, IntrinsicTypes.Float);
                         default:
                             throw new ArgumentOutOfRangeException();

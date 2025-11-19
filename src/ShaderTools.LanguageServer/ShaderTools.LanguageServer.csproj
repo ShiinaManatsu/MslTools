@@ -21,6 +21,6 @@
 		<ProjectReference Include="..\ShaderTools.CodeAnalysis.ShaderLab.Workspaces\ShaderTools.CodeAnalysis.ShaderLab.Workspaces.csproj" />
 	</ItemGroup>
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="if $(ConfigurationName) == Release (&#xD;&#xA;    xcopy &quot;$(TargetDir)*.*&quot; &quot;D:\TSProjects\messiahsldevhelper\bin\Release\win-x64\&quot; /Y /I /E&#xD;&#xA;    echo Release build has copied to code extension&#xD;&#xA;)" />
+		<Exec Command="if &quot;$(ConfigurationName)&quot; == &quot;Release&quot; (&#xD;&#xA;    echo Deleting old Release files...&#xD;&#xA;    if exist &quot;D:\TSProjects\messiahsldevhelper\bin\Release\win-x64\&quot; rmdir /S /Q &quot;D:\TSProjects\messiahsldevhelper\bin\Release\win-x64\&quot;&#xD;&#xA;    xcopy &quot;$(TargetDir)*.*&quot; &quot;D:\TSProjects\messiahsldevhelper\bin\Release\win-x64\&quot; /Y /I /E /F&#xD;&#xA;    echo Release build has been copied to VS Code extension folder&#xD;&#xA;)&#xD;&#xA;&#xD;&#xA;if &quot;$(ConfigurationName)&quot; == &quot;Debug&quot; (&#xD;&#xA;    echo Deleting old Debug files...&#xD;&#xA;    if exist &quot;D:\TSProjects\messiahsldevhelper\bin\Debug\win-x64\&quot; rmdir /S /Q &quot;D:\TSProjects\messiahsldevhelper\bin\Debug\win-x64\&quot;&#xD;&#xA;    xcopy &quot;$(TargetDir)*.*&quot; &quot;D:\TSProjects\messiahsldevhelper\bin\Debug\win-x64\&quot; /Y /I /E /F&#xD;&#xA;    echo Debug build has been copied to VS Code extension folder&#xD;&#xA;)" />
 	</Target>
 </Project>

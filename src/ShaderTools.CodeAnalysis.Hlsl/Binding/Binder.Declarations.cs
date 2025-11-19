@@ -1,15 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using Microsoft.CodeAnalysis.Text;
 using ShaderTools.CodeAnalysis.Hlsl.Binding.BoundNodes;
+using ShaderTools.CodeAnalysis.Hlsl.Compilation;
 using ShaderTools.CodeAnalysis.Hlsl.Diagnostics;
 using ShaderTools.CodeAnalysis.Hlsl.Parser;
 using ShaderTools.CodeAnalysis.Hlsl.Symbols;
 using ShaderTools.CodeAnalysis.Hlsl.Syntax;
 using ShaderTools.CodeAnalysis.Symbols;
 using ShaderTools.CodeAnalysis.Text;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Linq.Expressions;
+using Windows.UI.Text;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace ShaderTools.CodeAnalysis.Hlsl.Binding
@@ -175,7 +178,18 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
 
             BoundInitializer initializer = null;
             if (syntax.Initializer != null)
+            {
                 initializer = BindInitializer(syntax.Initializer);
+                if (initializer is BoundEqualsValue)
+                {
+                    var valueType = (initializer as BoundEqualsValue).Value.Type;
+                    var convesion = Conversion.Classify(valueType, variableType, ParameterDirection.In);
+                    if (convesion.ImplicitConversionType.IsImplicitNarrowing() || convesion.ImplicitConversionType.HasFlag(ConversionTypes.FloatTruncation))
+                    {
+                        Diagnostics.ReportImplicitTruncation(syntax.SourceRange, valueType, variableType);
+                    }
+                }
+            }
 
             return new BoundVariableDeclaration(symbol, variableType, boundQualifiers.ToImmutableArray(), initializer);
         }
