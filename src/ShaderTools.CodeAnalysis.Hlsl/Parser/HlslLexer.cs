@@ -39,6 +39,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
 
         private readonly SourceFile _rootFile;
         private readonly Stack<IncludeContext> _includeStack;
+        private readonly List<String> _includeFiles;
         private CharReader _charReader;
 
         private class IncludeContext
@@ -64,7 +65,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             _rootFile = file;
 
             _includeFileResolver = new IncludeFileResolver(
-                includeFileSystem ?? new DummyFileSystem(), 
+                includeFileSystem ?? new DummyFileSystem(),
                 options ?? new HlslParseOptions());
 
             _directives = DirectiveStack.Empty;
@@ -87,6 +88,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
 
             FileSegments = new List<FileSegment>();
             _includeStack = new Stack<IncludeContext>();
+            _includeFiles = new List<String>();
             PushIncludeContext(file);
         }
 
@@ -170,7 +172,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
                         {
                             VisitNode(originalNode);
                         }
-                        
+
                         leadingTrivia.AddRange(token.LeadingTrivia);
                         token = token.WithLeadingTrivia(leadingTrivia.ToImmutableArray());
                     }
@@ -203,7 +205,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             _diagnostics.Clear();
             while (true)
             {
-                _leadingTrivia.Clear();                
+                _leadingTrivia.Clear();
                 _start = _charReader.Position;
                 ReadTrivia(_leadingTrivia, isTrailing: false);
                 var newLeadingTrivia = _leadingTrivia.ToImmutableArray();
@@ -315,22 +317,28 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
 
             if (directive.Kind == SyntaxKind.IncludeDirectiveTrivia)
             {
-                var includeDirective = (IncludeDirectiveTriviaSyntax) directive;
+                var includeDirective = (IncludeDirectiveTriviaSyntax)directive;
                 var includeFilename = includeDirective.TrimmedFilename;
 
                 SourceFile include;
                 try
                 {
                     include = _includeFileResolver.OpenInclude(includeFilename, _includeStack.Peek().File);
+
+                    if (_includeFiles.Contains(include.FilePath))
+                    {
+                        return false;
+                    }
+
                     if (include == null)
                     {
-                        includeDirective = includeDirective.WithDiagnostic(Diagnostic.Create(HlslMessageProvider.Instance, includeDirective.SourceRange, (int) DiagnosticId.IncludeNotFound, includeFilename));
+                        includeDirective = includeDirective.WithDiagnostic(Diagnostic.Create(HlslMessageProvider.Instance, includeDirective.SourceRange, (int)DiagnosticId.IncludeNotFound, includeFilename));
                         triviaList.Add(includeDirective);
                     }
                 }
                 catch (Exception ex)
                 {
-                    includeDirective = includeDirective.WithDiagnostic(Diagnostic.Create(HlslMessageProvider.Instance, includeDirective.SourceRange, (int) DiagnosticId.IncludeNotFound, includeFilename, ex.Message));
+                    includeDirective = includeDirective.WithDiagnostic(Diagnostic.Create(HlslMessageProvider.Instance, includeDirective.SourceRange, (int)DiagnosticId.IncludeNotFound, includeFilename, ex.Message));
                     include = null;
                     triviaList.Add(includeDirective);
                 }
@@ -357,6 +365,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
 
             var includeContext = new IncludeContext(file);
             _includeStack.Push(includeContext);
+            _includeFiles.Add(file.FilePath);
             _charReader = includeContext.CharReader;
             FileSegments.Add(new FileSegment(file, 0));
         }
@@ -365,7 +374,8 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
         {
             _currentFileSegmentAbsolutePosition = FileSegments.Sum(x => x.Length);
 
-            _includeStack.Pop();
+            var file = _includeStack.Pop();
+            _includeFiles.Remove(file.File.FilePath);
             _charReader = _includeStack.Peek().CharReader;
 
             FileSegments.Add(new FileSegment(_includeStack.Peek().File, _charReader.Position));
@@ -572,7 +582,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             {
                 case '\0':
                     if (_includeStack.Count == 1 && _directives.HasUnfinishedIf())
-                        _diagnostics.Add(Diagnostic.Create(HlslMessageProvider.Instance, CurrentSpanStart, (int) DiagnosticId.EndIfDirectiveExpected));
+                        _diagnostics.Add(Diagnostic.Create(HlslMessageProvider.Instance, CurrentSpanStart, (int)DiagnosticId.EndIfDirectiveExpected));
                     _kind = SyntaxKind.EndOfFileToken;
                     break;
 
@@ -949,7 +959,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
                 }
             }
 
-            ExitLoop:
+        ExitLoop:
             _value = sb.ToString();
         }
 
@@ -1143,7 +1153,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
                 }
             }
 
-            ExitLoop:
+        ExitLoop:
 
             var text = sb.ToString();
 
@@ -1190,7 +1200,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             // an Int32 literal. Otherwise we return an Int64.
 
             if (int64 >= int.MinValue && int64 <= int.MaxValue)
-                return (int) int64;
+                return (int)int64;
 
             return int64;
         }
@@ -1330,7 +1340,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             _kind = SyntaxFacts.GetKeywordKind(text);
 
             _contextualKind = (_mode == LexerMode.Directive)
-                ? SyntaxFacts.GetPreprocessorKeywordKind(text) 
+                ? SyntaxFacts.GetPreprocessorKeywordKind(text)
                 : SyntaxFacts.GetContextualKeywordKind(text);
 
             switch (_kind)

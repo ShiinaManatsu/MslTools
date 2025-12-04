@@ -270,7 +270,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
                 Bind(node.Right, BindExpression));
 
             var convesion = Conversion.Classify(expression.Right.Type, expression.Left.Type, ParameterDirection.In);
-            if (convesion.ImplicitConversionType.IsImplicitNarrowing() || convesion.ImplicitConversionType.HasFlag(ConversionTypes.FloatTruncation))
+            if (convesion.ImplicitConversionType.HasFlag(ConversionTypes.FloatTruncation))
             {
                 Diagnostics.ReportImplicitTruncation(node.SourceRange, expression.Right.Type, expression.Left.Type);
             }

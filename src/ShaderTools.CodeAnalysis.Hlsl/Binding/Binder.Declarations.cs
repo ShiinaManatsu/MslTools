@@ -184,7 +184,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
                 {
                     var valueType = (initializer as BoundEqualsValue).Value.Type;
                     var convesion = Conversion.Classify(valueType, variableType, ParameterDirection.In);
-                    if (convesion.ImplicitConversionType.IsImplicitNarrowing() || convesion.ImplicitConversionType.HasFlag(ConversionTypes.FloatTruncation))
+                    if (convesion.ImplicitConversionType.HasFlag(ConversionTypes.FloatTruncation))
                     {
                         Diagnostics.ReportImplicitTruncation(syntax.SourceRange, valueType, variableType);
                     }

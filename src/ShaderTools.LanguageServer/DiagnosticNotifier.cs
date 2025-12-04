@@ -40,10 +40,10 @@ namespace ShaderTools.LanguageServer
 
         private void OnDiagnosticsUpdated(object sender, DiagnosticsUpdatedEventArgs e)
         {
-            _queue.ScheduleTask(() => UpdateDiagnostics(e.Document));
+            _ = _queue.ScheduleTask(() => UpdateDiagnosticsAsync(e.Document));
         }
 
-        private async Task UpdateDiagnostics(Document document)
+        private async Task UpdateDiagnosticsAsync(Document document)
         {
             var diagnostics = document != null
                 ? await _diagnosticService.GetDiagnosticsAsync(document.Id, CancellationToken.None)
@@ -91,7 +91,7 @@ namespace ShaderTools.LanguageServer
             diagnosticUris.AddRange(diagnosticsGroupedByFile.Keys);
         }
 
-        private static readonly DiagnosticComparer CachedDiagnosticComparer = new DiagnosticComparer();
+        private static readonly DiagnosticComparer CachedDiagnosticComparer = new();
 
         private sealed class DiagnosticComparer : IEqualityComparer<OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic>
         {
