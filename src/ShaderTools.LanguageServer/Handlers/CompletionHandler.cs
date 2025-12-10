@@ -14,7 +14,6 @@ using CompletionTrigger = Microsoft.CodeAnalysis.Completion.CompletionTrigger;
 
 namespace ShaderTools.LanguageServer.Handlers
 {
-
     internal sealed class CompletionHandler : ICompletionHandler
     {
         private readonly LanguageServerWorkspace _workspace;
@@ -54,13 +53,14 @@ namespace ShaderTools.LanguageServer.Handlers
             }
 
             var completionItems = completionList.Items
-                .Select(x => ConvertCompletionItem(document, completionList.Rules, x))
+                .AsParallel()
+                .Select(x => ConvertCompletionItem(document, completionList.Rules, completionList.Rules.DefaultCommitCharacters.Select(x => x.ToString()).ToArray(), x))
                 .ToArray();
 
             return completionItems;
         }
 
-        private static CompletionItem ConvertCompletionItem(Document document, Microsoft.CodeAnalysis.Completion.CompletionRules completionRules, CodeAnalysis.Completion.CompletionItem item)
+        private static CompletionItem ConvertCompletionItem(Document document, Microsoft.CodeAnalysis.Completion.CompletionRules completionRules, Container<string> commitCharacters, CodeAnalysis.Completion.CompletionItem item)
         {
             var description = CommonCompletionItem.GetDescription(item);
 
@@ -100,7 +100,8 @@ namespace ShaderTools.LanguageServer.Handlers
                 },
                 Detail = detail,
                 Documentation = documentation,
-                CommitCharacters = completionRules.DefaultCommitCharacters.Select(x => x.ToString()).ToArray()
+                //CommitCharacters = completionRules.DefaultCommitCharacters.Select(x => x.ToString()).ToArray()
+                CommitCharacters = commitCharacters
             };
         }
 
