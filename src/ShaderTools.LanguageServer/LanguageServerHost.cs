@@ -84,6 +84,7 @@ namespace ShaderTools.LanguageServer
                     .AddLanguageProtocolLogging()
                     .SetMinimumLevel(_minLogLevel))
                 .AddHandler("textDocument/register", new TextureRegisterHandler(_workspace, documentSelector))
+                .AddHandler("messiah/unrealMapping", new UnrealMappingHandler(_workspace, documentSelector))
                 .AddHandler(new TextDocumentSyncHandler(_workspace, documentSelector))
                 .AddHandler(new CompletionHandler(_workspace, documentSelector))
                 .AddHandler(new DefinitionHandler(_workspace, documentSelector))

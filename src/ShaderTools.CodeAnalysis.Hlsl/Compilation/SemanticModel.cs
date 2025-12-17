@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
+using ABI.Windows.ApplicationModel.Background;
 using ShaderTools.CodeAnalysis.Compilation;
 using ShaderTools.CodeAnalysis.Diagnostics;
 using ShaderTools.CodeAnalysis.Hlsl.Binding;
@@ -29,20 +31,114 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
             _bindingResult = bindingResult;
         }
 
-        public List<VariableDeclaratorSyntax> GetTextures()
+        public IEnumerable<VariableDeclaratorSyntax> GetLocalTextures()
         {
-            var textures = new List<VariableDeclaratorSyntax>();
-            foreach (var symbol in _bindingResult.RootBinder.LocalSymbols)
-            {
-                if (symbol.Value.First() is SourceVariableSymbol variable)
+            var textures = ((BoundCompilationUnit)_bindingResult.BoundRoot).Declarations
+                .OfType<BoundMultipleVariableDeclarations>()
+                .Select(x => x.VariableDeclarations.First())
+                .Where(x =>
                 {
-                    if (variable.ValueType.Name.StartsWith("Texture"))
+                    if (x.DeclaredType is IntrinsicObjectTypeSymbol symbol)
                     {
-                        textures.Add(variable.DeclaringSyntaxNodes.First() as VariableDeclaratorSyntax);
+                        return Is2DVariant(symbol.PredefinedType);
+                    }
+
+                    return false;
+                })
+                .Select(x => x.VariableSymbol)
+                .OfType<SourceVariableSymbol>()
+                .SelectMany(x => x.DeclaringSyntaxNodes)
+                .OfType<VariableDeclaratorSyntax>()
+                .ToList();
+
+            return textures;
+
+            static bool Is2DVariant(PredefinedObjectType type)
+            {
+                return type switch
+                {
+                    PredefinedObjectType.Texture or
+                        PredefinedObjectType.Texture1D or
+                        PredefinedObjectType.Texture2D or
+                        PredefinedObjectType.Texture2DMS or
+                        PredefinedObjectType.Texture3D or
+                        PredefinedObjectType.TextureCube => true,
+                    _ => false
+                };
+            }
+        }
+
+        public IEnumerable<(string, string)> GetLocalUserTextures()
+        {
+            return ((BoundCompilationUnit)_bindingResult.BoundRoot).Declarations
+                .OfType<BoundMultipleVariableDeclarations>()
+                .SelectMany(x => x.VariableDeclarations)
+                .Where(x => x.DeclaredType.Name != "[Unknown]" && x.DeclaredType is IntrinsicObjectTypeSymbol
+                {
+                    PredefinedType: PredefinedObjectType.Texture2D or
+                    PredefinedObjectType.Texture3D
+                })
+                .Where(x => !x.Qualifiers.Any(q => q is BoundSemantic))
+                .Select(x => (x.DeclaredType.Name, x.VariableSymbol.Name));
+        }
+
+        public IEnumerable<(string, string)> GetConstantBufferByName(string name)
+        {
+            static bool FilterAnnotation(BoundVariableDeclaration boundVariableDeclaration)
+            {
+                bool keep = true;
+                foreach (var DeclaringSyntaxNode in boundVariableDeclaration.VariableSymbol.DeclaringSyntaxNodes)
+                {
+                    if (DeclaringSyntaxNode is VariableDeclaratorSyntax variableDeclaratorSyntax && variableDeclaratorSyntax.Annotations != null)
+                    {
+                        foreach (var annotation in variableDeclaratorSyntax.Annotations.Annotations)
+                        {
+                            foreach (var variable in annotation.Declaration.Variables)
+                            {
+                                if (variable.Identifier.IsFirstTokenInMacroExpansion)
+                                {
+                                    if (variable.Identifier.MacroReference.DefineDirective.ToString().Contains("visible = \"false\"", StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        keep = false;
+                                    }
+                                }
+                                else
+                                {
+                                    if (variable.Initializer is EqualsValueClauseSyntax equalsValueClause)
+                                    {
+                                        var isVisible = variable.Identifier.ToString().Contains("visible", StringComparison.OrdinalIgnoreCase);
+                                        var isFalse = equalsValueClause.Value.ToString().Contains("false", StringComparison.OrdinalIgnoreCase);
+                                        if (isVisible && isFalse)
+                                        {
+                                            keep = false;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+                return keep;
             }
-            return textures;
+
+            return ((BoundCompilationUnit)_bindingResult.BoundRoot).Declarations
+                .OfType<BoundConstantBuffer>()
+                .Where(x => x.ConstantBufferSymbol.Name == name)
+                .SelectMany(x => x.Variables)
+                .SelectMany(x => x.VariableDeclarations)
+                .Where(FilterAnnotation)
+                .Select(x => (x.DeclaredType.Name, x.VariableSymbol.Name));
+        }
+
+        public IEnumerable<(string, string)> GetLocalToggles()
+        {
+            return ((BoundCompilationUnit)_bindingResult.BoundRoot).Declarations
+                .OfType<BoundToggle>()
+                .Select(x => x.ToggleSymbol)
+                .Where(x => !x.Syntax.StateInitializer.Properties.Any(property =>
+                    (property.Name.ToString() == "Visible" && property.Value.ToString() == "false") ||
+                    property.Name.ToString() == "AffectedTex"))
+                .Select(x => ("Toggle", x.Name));
         }
 
         public override ISymbol GetDeclaredSymbol(SyntaxNodeBase declaration)
@@ -253,6 +349,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
         {
             return expression.Symbol;
         }
+
         private static Symbol GetSymbol(BoundVariableExpression expression)
         {
             return expression.Symbol;

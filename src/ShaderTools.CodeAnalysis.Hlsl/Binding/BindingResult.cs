@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using ShaderTools.CodeAnalysis.Diagnostics;
 using ShaderTools.CodeAnalysis.Hlsl.Binding.BoundNodes;
 using ShaderTools.CodeAnalysis.Hlsl.Syntax;
@@ -23,18 +24,20 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
         {
             Root = root;
             BoundRoot = boundRoot;
-
             _boundNodeFromSyntaxNode = boundNodeFromSyntaxNode;
             _binderFromBoundNode = binderFromBoundNode;
-
-            Diagnostics = diagnostics.ToImmutableArray();
+            Diagnostics = [..diagnostics];
         }
 
         public BoundNode GetBoundNode(SyntaxNode syntaxNode)
         {
-            BoundNode result;
-            _boundNodeFromSyntaxNode.TryGetValue(syntaxNode, out result);
+            _boundNodeFromSyntaxNode.TryGetValue(syntaxNode, out var result);
             return result;
+        }
+
+        public IEnumerable<T> GetBoundNodes<T>() where T : BoundNode
+        {
+            return _binderFromBoundNode.Select(x => x.Key).OfType<T>();
         }
 
         public Binder GetBinder(SyntaxNode syntaxNode)
