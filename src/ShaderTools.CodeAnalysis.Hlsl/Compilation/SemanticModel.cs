@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 using ABI.Windows.ApplicationModel.Background;
 using ShaderTools.CodeAnalysis.Compilation;
@@ -12,6 +13,8 @@ using ShaderTools.CodeAnalysis.Hlsl.Syntax;
 using ShaderTools.CodeAnalysis.Symbols;
 using ShaderTools.CodeAnalysis.Syntax;
 using ShaderTools.CodeAnalysis.Text;
+using System.Collections.Immutable;
+using Binder = ShaderTools.CodeAnalysis.Hlsl.Binding.Binder;
 
 namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
 {
@@ -29,6 +32,42 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
         {
             Compilation = compilation;
             _bindingResult = bindingResult;
+        }
+
+        public SyntaxNode BindingRoot => _bindingResult.Root;
+
+        private List<(string Label, bool IsParameter, SourceRange SourceRange)> MappingFunctionInvocation(
+            BoundFunctionInvocationExpression x, SyntaxNode syntaxNode)
+        {
+            var result = new List<(string Label, bool IsParameter, SourceRange SourceRange)>();
+            // result.Add((x.Type.Name, false,syntaxNode.SourceRange));
+
+            if (x.Arguments.IsEmpty) return result;
+
+            if (syntaxNode is not FunctionInvocationExpressionSyntax syntax) return result;
+            if (x.Symbol == null) return result;
+            result.AddRange(x.Symbol.Parameters
+                .Select((p, i) =>
+                {
+                    // return ($"{p.Name}:{p.ValueType.Name}", true,
+                    return ($"{p.Name}:", true,
+                        syntax.ArgumentList.Arguments[i].SourceRange);
+                }));
+            return result;
+        }
+
+        public List<(string Label, bool IsParameter, SourceRange SourceRange)> GetBoundNode(SyntaxNode syntaxNode)
+        {
+            var bn = _bindingResult.GetBoundNode(syntaxNode);
+            if (bn == null) return [];
+
+            return bn switch
+            {
+                BoundVariableExpression x => [(x.Type.Name, true, syntaxNode.SourceRange)],
+                BoundFunctionInvocationExpression x => MappingFunctionInvocation(x, syntaxNode),
+                BoundFieldExpression x => [(x.Type.Name, true, syntaxNode.SourceRange)],
+                _ => []
+            };
         }
 
         public IEnumerable<VariableDeclaratorSyntax> GetLocalTextures()
@@ -82,45 +121,8 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
                 .Select(x => (x.DeclaredType.Name, x.VariableSymbol.Name));
         }
 
-        public IEnumerable<(string, string)> GetConstantBufferByName(string name)
+        public IEnumerable<(string, string)> GetConstantBufferByName(string name, bool filterInvisible = true)
         {
-            static bool FilterAnnotation(BoundVariableDeclaration boundVariableDeclaration)
-            {
-                bool keep = true;
-                foreach (var DeclaringSyntaxNode in boundVariableDeclaration.VariableSymbol.DeclaringSyntaxNodes)
-                {
-                    if (DeclaringSyntaxNode is VariableDeclaratorSyntax variableDeclaratorSyntax && variableDeclaratorSyntax.Annotations != null)
-                    {
-                        foreach (var annotation in variableDeclaratorSyntax.Annotations.Annotations)
-                        {
-                            foreach (var variable in annotation.Declaration.Variables)
-                            {
-                                if (variable.Identifier.IsFirstTokenInMacroExpansion)
-                                {
-                                    if (variable.Identifier.MacroReference.DefineDirective.ToString().Contains("visible = \"false\"", StringComparison.OrdinalIgnoreCase))
-                                    {
-                                        keep = false;
-                                    }
-                                }
-                                else
-                                {
-                                    if (variable.Initializer is EqualsValueClauseSyntax equalsValueClause)
-                                    {
-                                        var isVisible = variable.Identifier.ToString().Contains("visible", StringComparison.OrdinalIgnoreCase);
-                                        var isFalse = equalsValueClause.Value.ToString().Contains("false", StringComparison.OrdinalIgnoreCase);
-                                        if (isVisible && isFalse)
-                                        {
-                                            keep = false;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                return keep;
-            }
-
             return ((BoundCompilationUnit)_bindingResult.BoundRoot).Declarations
                 .OfType<BoundConstantBuffer>()
                 .Where(x => x.ConstantBufferSymbol.Name == name)
@@ -128,6 +130,44 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
                 .SelectMany(x => x.VariableDeclarations)
                 .Where(FilterAnnotation)
                 .Select(x => (x.DeclaredType.Name, x.VariableSymbol.Name));
+
+            bool FilterAnnotation(BoundVariableDeclaration boundVariableDeclaration)
+            {
+                var keep = true;
+                foreach (var declaringSyntaxNode in boundVariableDeclaration.VariableSymbol.DeclaringSyntaxNodes)
+                {
+                    if (declaringSyntaxNode is not VariableDeclaratorSyntax variableDeclaratorSyntax ||
+                        variableDeclaratorSyntax.Annotations == null) continue;
+                    foreach (var variable in from annotation in variableDeclaratorSyntax.Annotations.Annotations
+                                             from variable in annotation.Declaration.Variables
+                                             where filterInvisible
+                                             select variable)
+                    {
+                        if (variable.Identifier.IsFirstTokenInMacroExpansion)
+                        {
+                            if (variable.Identifier.MacroReference.DefineDirective.ToString()
+                                .Contains("visible = \"false\"", StringComparison.OrdinalIgnoreCase))
+                            {
+                                keep = false;
+                            }
+                        }
+                        else
+                        {
+                            if (variable.Initializer is not EqualsValueClauseSyntax equalsValueClause) continue;
+                            var isVisible = variable.Identifier.ToString()
+                                .Contains("visible", StringComparison.OrdinalIgnoreCase);
+                            var isFalse = equalsValueClause.Value.ToString()
+                                .Contains("false", StringComparison.OrdinalIgnoreCase);
+                            if (isVisible && isFalse)
+                            {
+                                keep = false;
+                            }
+                        }
+                    }
+                }
+
+                return keep;
+            }
         }
 
         public IEnumerable<(string, string)> GetLocalToggles()

@@ -24,7 +24,7 @@ public class TextureRegisterItem
 
 public class TextureRegisterResponse
 {
-    public List<TextureRegisterItem> Textures { get; set; }
+    public List<TextureRegisterItem> Textures { get; set; } = [];
 }
 
 internal class TextureRegisterHandler(
@@ -35,8 +35,11 @@ internal class TextureRegisterHandler(
         CancellationToken cancellationToken)
     {
         var document = workspace.GetDocument(request.Uri);
-        var sm = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) as SemanticModel;
-        var result = new TextureRegisterResponse { Textures = new List<TextureRegisterItem>() };
+
+        var result = new TextureRegisterResponse();
+        if (await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) is not SemanticModel sm)
+            return result;
+
         foreach (var declaration in sm.GetLocalTextures())
         {
             var name = declaration.Identifier.Text;

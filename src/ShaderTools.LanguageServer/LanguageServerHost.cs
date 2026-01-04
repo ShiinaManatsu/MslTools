@@ -85,6 +85,7 @@ namespace ShaderTools.LanguageServer
                     .SetMinimumLevel(_minLogLevel))
                 .AddHandler("textDocument/register", new TextureRegisterHandler(_workspace, documentSelector))
                 .AddHandler("messiah/unrealMapping", new UnrealMappingHandler(_workspace, documentSelector))
+                .AddHandler("messiah/bufferLayout", new BufferLayoutHandler(_workspace, documentSelector))
                 .AddHandler(new TextDocumentSyncHandler(_workspace, documentSelector))
                 .AddHandler(new CompletionHandler(_workspace, documentSelector))
                 .AddHandler(new DefinitionHandler(_workspace, documentSelector))
@@ -93,6 +94,7 @@ namespace ShaderTools.LanguageServer
                 .AddHandler(new DocumentSymbolsHandler(_workspace, documentSelector))
                 .AddHandler(new HoverHandler(_workspace, documentSelector))
                 .AddHandler(new SemanticTokenHandler(_workspace, documentSelector))
+                .AddHandler(new InlayHintsHandler(_workspace, documentSelector))
                 .AddHandler(new SignatureHelpHandler(_workspace, documentSelector)));
 
             var diagnosticService = _workspace.Services.GetService<IDiagnosticService>();
