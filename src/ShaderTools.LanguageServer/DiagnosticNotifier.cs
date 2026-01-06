@@ -4,6 +4,7 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.Diagnostics;
+using ShaderTools.CodeAnalysis.Hlsl.Diagnostics;
 using ShaderTools.Utilities;
 using ShaderTools.Utilities.Collections;
 using ShaderTools.Utilities.Threading;
@@ -13,6 +14,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Windows.Media.Protection.PlayReady;
 
 namespace ShaderTools.LanguageServer
 {
@@ -53,11 +55,16 @@ namespace ShaderTools.LanguageServer
             var reportScope = await _server.Configuration.GetConfiguration([new ConfigurationItem { Section = "hlsl-client" }]).ConfigureAwait(false);
 
             var activeFileOnly = false;
+            var reportTruncation = false;
             try
             {
                 if (reportScope.AsEnumerable().ToDictionary()["hlsl-client:diagnostic:reportScope"] == "active")
                 {
                     activeFileOnly = true;
+                }
+                if (reportScope.AsEnumerable().ToDictionary()["hlsl-client:diagnostic:types:reportImplicitTruncation"] == "True")
+                {
+                    reportTruncation = true;
                 }
             }
             catch
@@ -67,6 +74,7 @@ namespace ShaderTools.LanguageServer
 
             var diagnosticsGroupedByFile = diagnostics
                 .Where(x => x.FileSpan.File.FilePath == document.FilePath || !activeFileOnly)
+                .Where(x => x.Diagnostic.Descriptor.Code != (int)DiagnosticId.ImplicitTruncation || reportTruncation)
                 .GroupBy(x => x.FileSpan.File.FilePath)
                 .ToDictionary(x => Helpers.ToUri(x.Key), x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToList());
 
