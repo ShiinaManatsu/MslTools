@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
+using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.Hlsl.Compilation;
 using ShaderTools.CodeAnalysis.Hlsl.Syntax;
@@ -15,21 +17,18 @@ namespace ShaderTools.LanguageServer.Handlers;
 
 #pragma warning disable 618
 
-internal class InlayHintsHandler() : IInlayHintsHandler
+internal class InlayHintsHandler(
+    LanguageServerWorkspace workspace,
+    ILanguageServer server,
+    TextDocumentSelector documentSelector)
+    : IInlayHintsHandler
 {
-    public InlayHintsHandler(LanguageServerWorkspace workspace, TextDocumentSelector documentSelector) : this()
+    private InlayHintRegistrationOptions _options = new()
     {
-        _workspace = workspace;
-        _options = new InlayHintRegistrationOptions
-        {
-            DocumentSelector = documentSelector,
-            ResolveProvider = false,
-            Id = "MSL Inlay Hints Handler"
-        };
-    }
-
-    private InlayHintRegistrationOptions _options;
-    private LanguageServerWorkspace _workspace;
+        DocumentSelector = documentSelector,
+        ResolveProvider = false,
+        Id = "MSL Inlay Hints Handler"
+    };
 
     private bool IfKeepNodes(SyntaxNode node)
     {
@@ -69,18 +68,35 @@ internal class InlayHintsHandler() : IInlayHintsHandler
 
     public async Task<InlayHintContainer> Handle(InlayHintParams request, CancellationToken cancellationToken)
     {
-        var document = _workspace.GetDocument(request.TextDocument.Uri);
+        var document = workspace.GetDocument(request.TextDocument.Uri);
 
 
         if (await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) is not SemanticModel sm)
             return [];
+
+
+        var withType = false;
+        var configuration = await server.Configuration.GetConfiguration(new ConfigurationItem { Section = "hlsl-client" }).ConfigureAwait(false);
+
+        try
+        {
+            if (configuration.AsEnumerable().ToDictionary()["hlsl-client:language:inlayHints:withType"] == "True")
+            {
+                withType = true; 
+            }
+        }
+        catch
+        { 
+            // ignored
+        }
+
 
         var nodes = GetHintNodesRecursively(sm.BindingRoot, document, request.Range);
 
         var hints = nodes
             .DistinctBy(x => x.Node)
             .SelectMany(x =>
-                sm.GetBoundNode(x.Node)
+                sm.GetBoundNode(x.Node, withType)
                     .Select(b => (Label: b.Label, IsParameter: b.IsParameter,
                         SourceFileSpan: sm.SyntaxTree.GetSourceFileSpan(b.SourceRange), Syntax: x.Node)))
             // .Where(x => x.SourceFileSpan.IsInRootFile)
@@ -96,7 +112,7 @@ internal class InlayHintsHandler() : IInlayHintsHandler
                     PaddingRight = true,
                 };
             })
-            .ToList(); 
+            .ToList();
 
         return hints;
     }

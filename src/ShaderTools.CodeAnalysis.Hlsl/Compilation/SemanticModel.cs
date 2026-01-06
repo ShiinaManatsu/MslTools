@@ -37,7 +37,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
         public SyntaxNode BindingRoot => _bindingResult.Root;
 
         private List<(string Label, bool IsParameter, SourceRange SourceRange)> MappingFunctionInvocation(
-            BoundFunctionInvocationExpression x, SyntaxNode syntaxNode)
+            BoundFunctionInvocationExpression x, SyntaxNode syntaxNode, bool withType)
         {
             var result = new List<(string Label, bool IsParameter, SourceRange SourceRange)>();
             // result.Add((x.Type.Name, false,syntaxNode.SourceRange));
@@ -47,16 +47,14 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
             if (syntaxNode is not FunctionInvocationExpressionSyntax syntax) return result;
             if (x.Symbol == null) return result;
             result.AddRange(x.Symbol.Parameters
-                .Select((p, i) =>
-                {
-                    // return ($"{p.Name}:{p.ValueType.Name}", true,
-                    return ($"{p.Name}:", true,
-                        syntax.ArgumentList.Arguments[i].SourceRange);
-                }));
+                .Take(syntax.ArgumentList.Arguments.Count)
+                .Select((p, i) => ($"{p.Name}:{(withType ? p.ValueType.Name : string.Empty)}", true,
+                    syntax.ArgumentList.Arguments[i].SourceRange)));
             return result;
         }
 
-        public List<(string Label, bool IsParameter, SourceRange SourceRange)> GetBoundNode(SyntaxNode syntaxNode)
+        public List<(string Label, bool IsParameter, SourceRange SourceRange)> GetBoundNode(SyntaxNode syntaxNode,
+            bool withType)
         {
             var bn = _bindingResult.GetBoundNode(syntaxNode);
             if (bn == null) return [];
@@ -64,7 +62,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
             return bn switch
             {
                 BoundVariableExpression x => [(x.Type.Name, true, syntaxNode.SourceRange)],
-                BoundFunctionInvocationExpression x => MappingFunctionInvocation(x, syntaxNode),
+                BoundFunctionInvocationExpression x => MappingFunctionInvocation(x, syntaxNode, withType),
                 BoundFieldExpression x => [(x.Type.Name, true, syntaxNode.SourceRange)],
                 _ => []
             };
@@ -139,9 +137,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
                     if (declaringSyntaxNode is not VariableDeclaratorSyntax variableDeclaratorSyntax ||
                         variableDeclaratorSyntax.Annotations == null) continue;
                     foreach (var variable in from annotation in variableDeclaratorSyntax.Annotations.Annotations
-                                             from variable in annotation.Declaration.Variables
-                                             where filterInvisible
-                                             select variable)
+                             from variable in annotation.Declaration.Variables
+                             where filterInvisible
+                             select variable)
                     {
                         if (variable.Identifier.IsFirstTokenInMacroExpansion)
                         {
@@ -507,9 +505,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
         {
             var token = root.FindTokenContext(position);
             return (from n in token.Parent.AncestorsAndSelf().Cast<SyntaxNode>()
-                    let bc = _bindingResult.GetBinder(n)
-                    where bc != null
-                    select n).FirstOrDefault();
+                let bc = _bindingResult.GetBinder(n)
+                where bc != null
+                select n).FirstOrDefault();
         }
     }
 }
