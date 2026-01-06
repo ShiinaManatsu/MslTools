@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.Diagnostics;
 using ShaderTools.Utilities;
+using ShaderTools.Utilities.Collections;
 using ShaderTools.Utilities.Threading;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShaderTools.LanguageServer
 {
@@ -59,12 +60,15 @@ namespace ShaderTools.LanguageServer
                     activeFileOnly = true;
                 }
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             var diagnosticsGroupedByFile = diagnostics
                 .Where(x => x.FileSpan.File.FilePath == document.FilePath || !activeFileOnly)
                 .GroupBy(x => x.FileSpan.File.FilePath)
-                .ToDictionary(x => Helpers.ToUri(x.Key), x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToArray());
+                .ToDictionary(x => Helpers.ToUri(x.Key), x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToList());
 
             if (!_lastUris.TryGetValue(document.Id, out var diagnosticUris))
             {
@@ -77,7 +81,7 @@ namespace ShaderTools.LanguageServer
             {
                 if (!diagnosticsGroupedByFile.TryGetValue(diagnosticUri, out var diagnosticsForThisFile))
                 {
-                    diagnosticsForThisFile = Array.Empty<OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic>();
+                    diagnosticsForThisFile = [];
                 }
 
                 _server.TextDocument.PublishDiagnostics(new PublishDiagnosticsParams

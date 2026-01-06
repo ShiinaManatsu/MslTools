@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Text;
+﻿using Microsoft.CodeAnalysis.Text;
 using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.NavigateTo;
-using ShaderTools.CodeAnalysis.Shared.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Range = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
 
 namespace ShaderTools.LanguageServer
@@ -51,7 +51,7 @@ namespace ShaderTools.LanguageServer
         public static TextSpan ToSpan(SourceText sourceText, Range range)
         {
             var start = range.Start;
-            var end=range.End;
+            var end = range.End;
 
             return new TextSpan(sourceText.Lines.GetPosition(new LinePosition(start.Line, start.Character)),
                 sourceText.Lines.GetPosition(new LinePosition(end.Line, end.Character)));
@@ -65,13 +65,15 @@ namespace ShaderTools.LanguageServer
 
             var linePositionSpan = ToRange(sourceFileSpan.File.Text, sourceFileSpan.Span);
 
+            var severity = ToDiagnosticSeverity(diagnostic.Diagnostic.Severity);
             return new Diagnostic
             {
-                Severity = ToDiagnosticSeverity(diagnostic.Diagnostic.Severity),
+                Severity = severity,
                 Message = diagnostic.Diagnostic.Message,
                 Code = diagnostic.Diagnostic.Descriptor.Id,
                 Source = DiagnosticSourceName,
-                Range = linePositionSpan
+                Range = linePositionSpan,
+                Tags = severity == DiagnosticSeverity.Hint ? new List<DiagnosticTag> { DiagnosticTag.Unnecessary } : []
             };
         }
 
@@ -85,6 +87,9 @@ namespace ShaderTools.LanguageServer
                 case CodeAnalysis.Diagnostics.DiagnosticSeverity.Warning:
                     return DiagnosticSeverity.Warning;
 
+                case CodeAnalysis.Diagnostics.DiagnosticSeverity.Info:
+                    return DiagnosticSeverity.Hint;
+
                 default:
                     return DiagnosticSeverity.Error;
             }
@@ -96,13 +101,13 @@ namespace ShaderTools.LanguageServer
             var endPosition = document.SourceText.Lines.GetPosition(ToLinePosition(changeRange.End));
 
             return new TextChange(
-                TextSpan.FromBounds(startPosition, endPosition), 
+                TextSpan.FromBounds(startPosition, endPosition),
                 insertString);
         }
 
         private static LinePosition ToLinePosition(Position position)
         {
-            return new LinePosition((int)position.Line, (int) position.Character);
+            return new LinePosition((int)position.Line, (int)position.Character);
         }
 
         public static async Task FindSymbolsInDocumentAsync(

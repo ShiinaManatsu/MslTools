@@ -66,5 +66,6 @@
         RetObjectRequired,
         ReturnExpected,
         InvalidType,
+        DisabledText,
     }
 }

@@ -23,6 +23,8 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Diagnostics
                 case DiagnosticId.LoopControlVariableConflict:
                 case DiagnosticId.ImplicitTruncation:
                     return DiagnosticSeverity.Warning;
+                case DiagnosticId.DisabledText:
+                    return DiagnosticSeverity.Info;
                 default:
                     return DiagnosticSeverity.Error;
             }

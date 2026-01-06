@@ -3,6 +3,7 @@
     public enum DiagnosticSeverity
     {
         Warning,
-        Error
+        Error,
+        Info
     }
 }

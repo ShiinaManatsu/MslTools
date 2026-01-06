@@ -66,6 +66,11 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Diagnostics
 
         #region Parser errors
 
+        public static void ReportTokenDisabled(this ICollection<Diagnostic> diagnostics, SourceRange sourceRange)
+        {
+            diagnostics.Report(sourceRange, DiagnosticId.DisabledText);
+        }
+
         public static void ReportTokenExpected(this ICollection<Diagnostic> diagnostics, SourceRange sourceRange, SyntaxToken actual, SyntaxKind expected)
         {
             var actualText = actual.GetDisplayText();

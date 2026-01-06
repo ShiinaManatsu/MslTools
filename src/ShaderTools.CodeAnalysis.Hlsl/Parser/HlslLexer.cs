@@ -445,7 +445,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             var end = _charReader.Position;
             var span = TextSpan.FromBounds(_start, end);
             var text = File.Text.GetSubText(span).ToString();
-            return new SyntaxTrivia(SyntaxKind.DisabledTextTrivia, text, MakeAbsolute(span), CreateSourceFileSpan(span), ImmutableArray<Diagnostic>.Empty);
+            var range = MakeAbsolute(span);
+            _diagnostics.ReportTokenDisabled(range);
+            return new SyntaxTrivia(SyntaxKind.DisabledTextTrivia, text, range, CreateSourceFileSpan(span), ImmutableArray<Diagnostic>.Empty);
         }
 
         private SyntaxNode LexSingleDirective(
