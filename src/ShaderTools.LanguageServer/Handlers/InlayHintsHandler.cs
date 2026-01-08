@@ -82,11 +82,11 @@ internal class InlayHintsHandler(
         {
             if (configuration.AsEnumerable().ToDictionary()["hlsl-client:language:inlayHints:withType"] == "True")
             {
-                withType = true; 
+                withType = true;
             }
         }
         catch
-        { 
+        {
             // ignored
         }
 
@@ -112,6 +112,7 @@ internal class InlayHintsHandler(
                     PaddingRight = true,
                 };
             })
+            .DistinctBy(x => x.Position)
             .ToList();
 
         return hints;

@@ -32,6 +32,10 @@ namespace ShaderTools.LanguageServer.Handlers
 
         public Task<Unit> Handle(DidChangeTextDocumentParams notification, CancellationToken cancellationToken)
         {
+            if (notification.TextDocument.Uri.Scheme.Contains("chat"))
+            {
+                return Unit.Task;
+            }
             var document = workspace.GetDocument(notification.TextDocument.Uri);
 
             if (document == null)
@@ -41,7 +45,9 @@ namespace ShaderTools.LanguageServer.Handlers
 
             workspace.UpdateDocument(
                 document,
-                notification.ContentChanges.Select(x =>
+                notification
+                .ContentChanges
+                .Select(x =>
                     Helpers.ToTextChange(
                         document,
                         x.Range,
@@ -52,6 +58,11 @@ namespace ShaderTools.LanguageServer.Handlers
 
         public Task<Unit> Handle(DidOpenTextDocumentParams notification, CancellationToken cancellationToken)
         {
+
+            if (notification.TextDocument.Uri.Scheme.Contains("chat"))
+            {
+                return Unit.Task;
+            }
             workspace.OpenDocument(
                 notification.TextDocument.Uri,
                 notification.TextDocument.Text,
@@ -62,6 +73,11 @@ namespace ShaderTools.LanguageServer.Handlers
 
         public Task<Unit> Handle(DidCloseTextDocumentParams notification, CancellationToken cancellationToken)
         {
+
+            if (notification.TextDocument.Uri.Scheme.Contains("chat"))
+            {
+                return Unit.Task;
+            }
             var document = workspace.GetDocument(notification.TextDocument.Uri);
 
             if (document != null)
@@ -72,8 +88,7 @@ namespace ShaderTools.LanguageServer.Handlers
             return Unit.Task;
         }
 
-        public Task<Unit> Handle(DidSaveTextDocumentParams notification, CancellationToken cancellationToken) =>
-            Unit.Task;
+        public Task<Unit> Handle(DidSaveTextDocumentParams notification, CancellationToken cancellationToken) => Unit.Task;
 
         TextDocumentChangeRegistrationOptions
             IRegistration<TextDocumentChangeRegistrationOptions, TextSynchronizationCapability>.GetRegistrationOptions(
@@ -112,7 +127,7 @@ namespace ShaderTools.LanguageServer.Handlers
                 ClientCapabilities clientCapabilities)
         {
             return new TextDocumentSaveRegistrationOptions()
-                { DocumentSelector = documentSelector, IncludeText = true };
+            { DocumentSelector = documentSelector, IncludeText = true };
         }
     }
 }

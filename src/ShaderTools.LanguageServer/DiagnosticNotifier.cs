@@ -76,7 +76,7 @@ namespace ShaderTools.LanguageServer
                 .Where(x => x.FileSpan.File.FilePath == document.FilePath || !activeFileOnly)
                 .Where(x => x.Diagnostic.Descriptor.Code != (int)DiagnosticId.ImplicitTruncation || reportTruncation)
                 .GroupBy(x => x.FileSpan.File.FilePath)
-                .ToDictionary(x => Helpers.ToUri(x.Key), x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToList());
+                .ToDictionary(x => Helpers.ToUri(x.Key), x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToArray());
 
             if (!_lastUris.TryGetValue(document.Id, out var diagnosticUris))
             {
