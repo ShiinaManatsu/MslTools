@@ -38,6 +38,7 @@
         ConstantExpected,
 
         UndeclaredType,
+        UndeclaredProperty,
         UndeclaredFunction,
         UndeclaredMethod,
         UndeclaredIndexer,

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using OmniSharp.Extensions.LanguageServer.Protocol;
@@ -6,6 +7,7 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using ShaderTools.CodeAnalysis.NavigateTo;
+using ShaderTools.Utilities.Collections;
 
 namespace ShaderTools.LanguageServer.Handlers
 {
@@ -35,7 +37,9 @@ namespace ShaderTools.LanguageServer.Handlers
             await Helpers.FindSymbolsInDocumentAsync(searchService, document, string.Empty, token, symbols);
 
             var symbolsResult = ImmutableArray.CreateRange(
-                symbols.ToImmutable(), 
+                symbols
+                .Where(x => !x.Name.IsEmpty())
+                .ToImmutableArray(),
                 x => new SymbolInformationOrDocumentSymbol(x));
 
             return new SymbolInformationOrDocumentSymbolContainer(symbolsResult);

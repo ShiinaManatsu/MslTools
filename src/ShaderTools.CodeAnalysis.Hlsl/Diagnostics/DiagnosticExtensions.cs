@@ -103,6 +103,16 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Diagnostics
             diagnostics.Report(type.SourceRange, DiagnosticId.UndeclaredType, type.ToStringIgnoringMacroReferences());
         }
 
+        public static void ReportSamplerStateProperty(this ICollection<Diagnostic> diagnostics, SyntaxNode type)
+        {
+            diagnostics.Report(type.SourceRange, DiagnosticId.UndeclaredProperty, type.ToStringIgnoringMacroReferences());
+        }
+
+        public static void ReportToggleStateProperty(this ICollection<Diagnostic> diagnostics, SyntaxNode type)
+        {
+            diagnostics.Report(type.SourceRange, DiagnosticId.UndeclaredProperty, type.ToStringIgnoringMacroReferences());
+        }
+
         public static void ReportUndeclaredFunction(this ICollection<Diagnostic> diagnostics, FunctionInvocationExpressionSyntax node, IEnumerable<TypeSymbol> argumentTypes)
         {
             var name = node.Name.ToStringIgnoringMacroReferences();

@@ -61,6 +61,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding.BoundNodes
         FunctionDeclaration,
         FunctionDefinition,
         ConstantBuffer,
+        MessiahTechnique,
         Technique,
         Pass,
         Typedef,

@@ -223,6 +223,10 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
             if (technique != null)
                 return GetDeclaredSymbol(technique);
 
+            var messiahTechnique = node as MessiahTechniqueSyntax;
+            if (messiahTechnique != null)
+                return GetDeclaredSymbol(messiahTechnique);
+
             var toggle = node as ToggleDefinitionSyntax;
             if (toggle != null)
                 return GetDeclaredSymbol(toggle);
@@ -293,6 +297,12 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
         public TechniqueSymbol GetDeclaredSymbol(TechniqueSyntax syntax)
         {
             var result = _bindingResult.GetBoundNode(syntax) as BoundTechnique;
+            return result?.TechniqueSymbol;
+        }
+
+        public MessiahTechniqueSymbol GetDeclaredSymbol(MessiahTechniqueSyntax syntax)
+        {
+            var result = _bindingResult.GetBoundNode(syntax) as BoundMessiahTechnique;
             return result?.TechniqueSymbol;
         }
 

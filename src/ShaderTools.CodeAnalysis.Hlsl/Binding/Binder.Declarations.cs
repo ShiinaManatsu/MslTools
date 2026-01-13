@@ -45,6 +45,8 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
                     return BindTypeDeclaration((TypeDeclarationStatementSyntax)declaration, parent);
                 case SyntaxKind.Namespace:
                     return BindNamespace((NamespaceSyntax)declaration);
+                case SyntaxKind.MessiahTechniqueDeclaration:
+                    return BindMessiahTechniqueDeclaration((MessiahTechniqueSyntax)declaration);                    
                 case SyntaxKind.TechniqueDeclaration:
                     return BindTechniqueDeclaration((TechniqueSyntax)declaration);
                 case SyntaxKind.TypedefStatement:
@@ -60,30 +62,47 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
 
         private BoundNode BindToggleDefinitionDeclaration(ToggleDefinitionSyntax declaration, Symbol parent)
         {
-
-            var declareString = $"float {declaration.Name} = 1";
-
-            var syntax = SyntaxFactory.ParseCompilationUnit(new SourceFile(SourceText.From(declareString))).ChildNodes[0] as VariableDeclarationStatementSyntax;
-            //var test = SyntaxFactory.parsedi(new SourceFile(SourceText.From("#define TTTT 1")));
-
-
             var toggleSymbol = new ToggleSymbol(declaration);
             AddSymbol(toggleSymbol, declaration.Name.SourceRange);
 
             var defaultTo = false;
 
+            var expressions = new List<BoundExpression>();
+
             foreach (StatePropertySyntax child in declaration.StateInitializer.Properties)
             {
-                if (child.Name.Text.Equals("Default"))
+                var propertyName = child.Name.ToStringIgnoringMacroReferences();
+                var availableProperties = new List<string>
+                {
+                    "Name",
+                    "Description",
+                    "AffectedTex",
+                    "Visible",
+                    "Fallback",
+                    "Default",
+                    "Predict",
+                };
+
+                if (!availableProperties.Contains(propertyName))
+                {
+                    Diagnostics.ReportToggleStateProperty(child.Name);
+                }
+
+                if (propertyName.Equals("Default"))
                 {
                     if (child.Value.Kind == SyntaxKind.TrueLiteralExpression)
                     {
                         defaultTo = true;
                     }
                 }
+
+                if (propertyName == "AffectedTex")
+                {
+                    expressions.Add(Bind(child.Value, BindExpression));
+                }
             }
 
-            return new BoundToggle(toggleSymbol, defaultTo);
+            return new BoundToggle(toggleSymbol, defaultTo, [..expressions]);
         }
 
         private BoundNode BindTechniqueDeclaration(TechniqueSyntax declaration)
@@ -95,6 +114,18 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
             var techniqueBinder = new Binder(_sharedBinderState, this);
             var boundPasses = declaration.Passes.Select(x => techniqueBinder.Bind(x, techniqueBinder.BindPass));
             return new BoundTechnique(techniqueSymbol, boundPasses.ToImmutableArray());
+        }
+
+        private BoundNode BindMessiahTechniqueDeclaration(MessiahTechniqueSyntax declaration)
+        {
+            var techniqueSymbol = new MessiahTechniqueSymbol(declaration);
+            if (techniqueSymbol.Name != null)
+                AddSymbol(techniqueSymbol, declaration.Name.SourceRange);
+
+            var boundExpression = declaration.Properties.Select(property => Bind(property.Value, BindExpression))
+                .ToList();
+
+            return new BoundMessiahTechnique(techniqueSymbol, [..boundExpression]);
         }
 
         private BoundPass BindPass(PassSyntax syntax)

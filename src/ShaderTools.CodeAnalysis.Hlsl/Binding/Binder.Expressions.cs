@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Linq;
@@ -560,7 +561,10 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
                     }
                     else
                     {
-                        Diagnostics.ReportOverloadResolutionFailure(syntax, boundArguments.Length);
+                        if (syntax.GetAncestor<MessiahTechniqueSyntax>() == null)
+                        {
+                            Diagnostics.ReportOverloadResolutionFailure(syntax, boundArguments.Length);
+                        }
                     }
                 }
                 else
@@ -654,6 +658,33 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
 
         private BoundStateInitializer BindStateInitializer(StateInitializerSyntax syntax)
         {
+            var variableDeclarationSyntax = syntax.GetAncestorOrThis<VariableDeclarationSyntax>();
+            if (variableDeclarationSyntax != null && variableDeclarationSyntax.Type.ToString().Contains("sampler", StringComparison.CurrentCultureIgnoreCase))
+            {
+                var availableProperties = new List<string>
+                {
+                    "Filter",
+                    "AddressU",
+                    "AddressV",
+                    "AddressW",
+                    "Address",
+                    "MipLODBias",
+                    "MaxAnisotropy",
+                    "ComparisonFunc",
+                    "BorderColor",
+                    "MinLOD",
+                    "MaxLOD",
+                    "Texture"
+                };
+                foreach (var propertySyntax in syntax.Properties)
+                {
+                    if (!availableProperties.Contains(propertySyntax.Name.ValueText))
+                    {
+                        Diagnostics.ReportSamplerStateProperty(propertySyntax.Name);
+                    }
+                }
+            }
+
             return new BoundStateInitializer();
         }
 

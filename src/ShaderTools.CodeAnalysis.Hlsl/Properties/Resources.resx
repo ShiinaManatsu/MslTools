@@ -297,4 +297,7 @@
   <data name="DisabledText" xml:space="preserve">
     <value>Disabled Text</value>
   </data>
+  <data name="UndeclaredProperty" xml:space="preserve">
+    <value>Property '{0}' is not available.</value>
+  </data>
 </root>

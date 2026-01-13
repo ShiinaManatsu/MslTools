@@ -1,10 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<Tree Namespace="ShaderTools.CodeAnalysis.Hlsl.Syntax" LanguageName="Hlsl" Root="SyntaxNodeBase" >
-  <Using Namespace="ShaderTools.CodeAnalysis.Hlsl.Binding.BoundNodes"/>
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Tree Namespace="ShaderTools.CodeAnalysis.Hlsl.Syntax" LanguageName="Hlsl" Root="SyntaxNodeBase">
+  <Using Namespace="ShaderTools.CodeAnalysis.Hlsl.Binding.BoundNodes" />
 
-  <PredefinedNode Name="SyntaxNode" Base="SyntaxNodeBase"/>
-  <PredefinedNode Name="LocatedNode" Base="SyntaxNode"/>
-  <PredefinedNode Name="SyntaxToken" Base="LocatedNode"/>
+  <PredefinedNode Name="SyntaxNode" Base="SyntaxNodeBase" />
+  <PredefinedNode Name="LocatedNode" Base="SyntaxNode" />
+  <PredefinedNode Name="SyntaxToken" Base="LocatedNode" />
 
   <AbstractNode Name="BaseMatrixTypeSyntax" Base="NumericTypeSyntax">
     <TypeComment>
@@ -126,7 +126,7 @@
     </TypeComment>
   </AbstractNode>
   <Node Name="ModifiedTypeSyntax" Base="TypeSyntax">
-    <Kind Name="ModifiedType"/>
+    <Kind Name="ModifiedType" />
     <Field Name="Modifiers" Type="List&lt;SyntaxToken&gt;" />
     <Field Name="Type" Type="TypeSyntax" />
   </Node>
@@ -135,12 +135,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="Annotations"/>
+    <Kind Name="Annotations" />
     <Field Name="LessThanToken" Type="SyntaxToken">
       <PropertyComment>
         <summary>Gets the less than token.</summary>
       </PropertyComment>
-      <Kind Name="LessThanToken"/>
+      <Kind Name="LessThanToken" />
     </Field>
     <Field Name="Annotations" Type="List&lt;VariableDeclarationStatementSyntax&gt;">
       <PropertyComment>
@@ -151,7 +151,7 @@
       <PropertyComment>
         <summary>Gets the greater than token.</summary>
       </PropertyComment>
-      <Kind Name="GreaterThanToken"/>
+      <Kind Name="GreaterThanToken" />
     </Field>
   </Node>
 
@@ -159,12 +159,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ArgumentList"/>
+    <Kind Name="ArgumentList" />
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Arguments" Type="SeparatedSyntaxList&lt;ExpressionSyntax&gt;">
       <PropertyComment>
@@ -175,7 +175,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -183,12 +183,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ArrayInitializerExpression"/>
+    <Kind Name="ArrayInitializerExpression" />
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Elements" Type="SeparatedSyntaxList&lt;ExpressionSyntax&gt;">
       <PropertyComment>
@@ -199,7 +199,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -207,12 +207,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ArrayRankSpecifier"/>
+    <Kind Name="ArrayRankSpecifier" />
     <Field Name="OpenBracketToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBracketToken"/>
+      <Kind Name="OpenBracketToken" />
     </Field>
     <Field Name="Dimension" Type="ExpressionSyntax">
       <PropertyComment>
@@ -223,7 +223,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBracketToken"/>
+      <Kind Name="CloseBracketToken" />
     </Field>
   </Node>
 
@@ -245,7 +245,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="LessThanToken"/>
+      <Kind Name="LessThanToken" />
     </Field>
     <Field Name="Right" Type="ExpressionSyntax">
       <PropertyComment>
@@ -256,7 +256,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="GreaterThanToken"/>
+      <Kind Name="GreaterThanToken" />
     </Field>
   </Node>
 
@@ -264,12 +264,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="AttributeArgumentList"/>
+    <Kind Name="AttributeArgumentList" />
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Arguments" Type="SeparatedSyntaxList&lt;LiteralExpressionSyntax&gt;">
       <PropertyComment>
@@ -280,7 +280,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -288,24 +288,24 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="AttributeQualifiedName"/>
+    <Kind Name="AttributeQualifiedName" />
     <Field Name="Left" Type="IdentifierNameSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IdentifierName"/>
+      <Kind Name="IdentifierName" />
     </Field>
     <Field Name="ColonColonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonColonToken"/>
+      <Kind Name="ColonColonToken" />
     </Field>
     <Field Name="Right" Type="IdentifierNameSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IdentifierName"/>
+      <Kind Name="IdentifierName" />
     </Field>
   </Node>
 
@@ -313,7 +313,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="Attribute"/>
+    <Kind Name="Attribute" />
     <Field Name="Name" Type="NameSyntax">
       <PropertyComment>
         <summary></summary>
@@ -323,39 +323,39 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="AttributeArgumentList"/>
+      <Kind Name="AttributeArgumentList" />
     </Field>
   </Node>
 
   <AbstractNode Name="AttributeDeclarationSyntaxBase" Base="SyntaxNode">
-    
+
   </AbstractNode>
 
   <Node Name="AttributeSpecifierListSyntax" Base="AttributeDeclarationSyntaxBase">
-    <Kind Name="AttributeSpecifierList"/>
+    <Kind Name="AttributeSpecifierList" />
     <Field Name="OpenBracketToken" Type="SyntaxToken">
-      <Kind Name="OpenBracketToken"/>
+      <Kind Name="OpenBracketToken" />
     </Field>
     <Field Name="OpenBracketToken2" Type="SyntaxToken">
-      <Kind Name="OpenBracketToken"/>
+      <Kind Name="OpenBracketToken" />
     </Field>
     <Field Name="Attributes" Type="SeparatedSyntaxList&lt;AttributeSyntax&gt;" />
     <Field Name="CloseBracketToken" Type="SyntaxToken">
-      <Kind Name="CloseBracketToken"/>
+      <Kind Name="CloseBracketToken" />
     </Field>
     <Field Name="CloseBracketToken2" Type="SyntaxToken">
-      <Kind Name="CloseBracketToken"/>
+      <Kind Name="CloseBracketToken" />
     </Field>
   </Node>
 
   <Node Name="AttributeDeclarationSyntax" Base="AttributeDeclarationSyntaxBase">
-    <Kind Name="AttributeDeclaration"/>
+    <Kind Name="AttributeDeclaration" />
     <Field Name="OpenBracketToken" Type="SyntaxToken">
-      <Kind Name="OpenBracketToken"/>
+      <Kind Name="OpenBracketToken" />
     </Field>
     <Field Name="Attribute" Type="AttributeSyntax" />
     <Field Name="CloseBracketToken" Type="SyntaxToken">
-      <Kind Name="CloseBracketToken"/>
+      <Kind Name="CloseBracketToken" />
     </Field>
   </Node>
 
@@ -363,18 +363,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="BaseList"/>
+    <Kind Name="BaseList" />
     <Field Name="ColonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonToken"/>
+      <Kind Name="ColonToken" />
     </Field>
     <Field Name="BaseType" Type="IdentifierNameSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IdentifierNameSyntax"/>
+      <Kind Name="IdentifierNameSyntax" />
     </Field>
   </Node>
 
@@ -403,12 +403,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="Block"/>
+    <Kind Name="Block" />
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Statements" Type="List&lt;StatementSyntax&gt;">
       <PropertyComment>
@@ -419,7 +419,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -427,18 +427,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="BreakStatement"/>
+    <Kind Name="BreakStatement" />
     <Field Name="BreakKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="BreakKeyword"/>
+      <Kind Name="BreakKeyword" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -446,13 +446,13 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="CaseSwitchLabel"/>
+    <Kind Name="CaseSwitchLabel" />
     <Field Name="CaseKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CaseKeyword"/>
-      <Getter Name="Keyword" Override="true"/>
+      <Kind Name="CaseKeyword" />
+      <Getter Name="Keyword" Override="true" />
     </Field>
     <Field Name="Value" Type="ExpressionSyntax">
       <PropertyComment>
@@ -463,7 +463,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonToken"/>
+      <Kind Name="ColonToken" />
     </Field>
   </Node>
 
@@ -471,12 +471,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="CastExpression"/>
+    <Kind Name="CastExpression" />
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Type" Type="TypeSyntax">
       <PropertyComment>
@@ -492,7 +492,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
     <Field Name="Expression" Type="ExpressionSyntax">
       <PropertyComment>
@@ -505,7 +505,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="CompilationUnit"/>
+    <Kind Name="CompilationUnit" />
     <Field Name="Declarations" Type="List&lt;SyntaxNode&gt;">
       <PropertyComment>
         <summary></summary>
@@ -515,7 +515,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfFileToken"/>
+      <Kind Name="EndOfFileToken" />
     </Field>
   </Node>
 
@@ -523,12 +523,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="CompileExpression"/>
+    <Kind Name="CompileExpression" />
     <Field Name="CompileKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CompileKeyword"/>
+      <Kind Name="CompileKeyword" />
     </Field>
     <Field Name="ShaderTargetToken" Type="SyntaxToken">
       <PropertyComment>
@@ -555,7 +555,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CommaToken"/>
+      <Kind Name="CommaToken" />
     </Field>
     <Field Name="Right" Type="ExpressionSyntax">
       <PropertyComment>
@@ -568,7 +568,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ConditionalExpression"/>
+    <Kind Name="ConditionalExpression" />
     <Field Name="Condition" Type="ExpressionSyntax">
       <PropertyComment>
         <summary></summary>
@@ -578,7 +578,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="QuestionToken"/>
+      <Kind Name="QuestionToken" />
     </Field>
     <Field Name="WhenTrue" Type="ExpressionSyntax">
       <PropertyComment>
@@ -589,7 +589,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonToken"/>
+      <Kind Name="ColonToken" />
     </Field>
     <Field Name="WhenFalse" Type="ExpressionSyntax">
       <PropertyComment>
@@ -599,13 +599,13 @@
   </Node>
 
   <Node Name="ConstantBufferSyntax" Base="SyntaxNode">
-    <Kind Name="ConstantBufferDeclaration"/>
+    <Kind Name="ConstantBufferDeclaration" />
     <Field Name="Attributes" Type="List&lt;AttributeDeclarationSyntaxBase&gt;" />
     <Field Name="ConstantBufferKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ConstantBufferKeyword"/>
+      <Kind Name="ConstantBufferKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -616,13 +616,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="RegisterLocation"/>
+      <Kind Name="RegisterLocation" />
     </Field>
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Declarations" Type="List&lt;VariableDeclarationStatementSyntax&gt;">
       <PropertyComment>
@@ -633,13 +633,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -647,32 +647,32 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ToggleName"/>
+    <Kind Name="ToggleName" />
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
     </Field>
   </Node>
-  
+
   <Node Name="ToggleDefinitionSyntax" Base="InitializerSyntax">
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ToggleDefinitionDeclaration"/>    
+    <Kind Name="ToggleDefinitionDeclaration" />
     <Field Name="Name" Type="ToggleNameSyntax">
-      <Kind Name="ToggleName"/>
+      <Kind Name="ToggleName" />
     </Field>
-    <Field Name="StateInitializer" Type="StateInitializerSyntax"/>
+    <Field Name="StateInitializer" Type="StateInitializerSyntax" />
   </Node>
 
   <Node Name="ToggleConditionStatementSyntax" Base="StatementSyntax">
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IfStatement"/>
+    <Kind Name="IfStatement" />
     <Field Name="OpenBracketToken" Type="SyntaxToken">
-      <Kind Name="OpenBracketToken"/>
+      <Kind Name="OpenBracketToken" />
     </Field>
     <Field Name="Condition" Type="ExpressionSyntax">
       <PropertyComment>
@@ -680,7 +680,7 @@
       </PropertyComment>
     </Field>
     <Field Name="CloseBracketToken" Type="SyntaxToken">
-      <Kind Name="CloseBracketToken"/>
+      <Kind Name="CloseBracketToken" />
     </Field>
   </Node>
 
@@ -688,18 +688,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ContinueStatement"/>
+    <Kind Name="ContinueStatement" />
     <Field Name="ContinueKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ContinueKeyword"/>
+      <Kind Name="ContinueKeyword" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -707,19 +707,19 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="DefaultSwitchLabel"/>
+    <Kind Name="DefaultSwitchLabel" />
     <Field Name="DefaultKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DefaultKeyword"/>
-      <Getter Name="Keyword" Override="true"/>
+      <Kind Name="DefaultKeyword" />
+      <Getter Name="Keyword" Override="true" />
     </Field>
     <Field Name="ColonToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonToken"/>
+      <Kind Name="ColonToken" />
     </Field>
   </Node>
 
@@ -727,18 +727,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="DiscardStatement"/>
+    <Kind Name="DiscardStatement" />
     <Field Name="DiscardKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DiscardKeyword"/>
+      <Kind Name="DiscardKeyword" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemiColonToken"/>
+      <Kind Name="SemiColonToken" />
     </Field>
   </Node>
 
@@ -746,12 +746,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="DoStatement"/>
+    <Kind Name="DoStatement" />
     <Field Name="DoKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DoKeyword"/>
+      <Kind Name="DoKeyword" />
     </Field>
     <Field Name="Statement" Type="StatementSyntax">
       <PropertyComment>
@@ -762,13 +762,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="WhileKeyword"/>
+      <Kind Name="WhileKeyword" />
     </Field>
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Condition" Type="ExpressionSyntax">
       <PropertyComment>
@@ -779,13 +779,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -793,7 +793,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ElementAccessExpression"/>
+    <Kind Name="ElementAccessExpression" />
     <Field Name="Expression" Type="ExpressionSyntax">
       <PropertyComment>
         <summary></summary>
@@ -803,7 +803,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBracketToken"/>
+      <Kind Name="OpenBracketToken" />
     </Field>
     <Field Name="Index" Type="ExpressionSyntax">
       <PropertyComment>
@@ -814,7 +814,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBracketToken"/>
+      <Kind Name="CloseBracketToken" />
     </Field>
   </Node>
 
@@ -822,12 +822,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ElseClause"/>
+    <Kind Name="ElseClause" />
     <Field Name="ElseKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ElseKeyword"/>
+      <Kind Name="ElseKeyword" />
     </Field>
     <Field Name="Statement" Type="StatementSyntax">
       <PropertyComment>
@@ -835,17 +835,17 @@
       </PropertyComment>
     </Field>
   </Node>
- 
+
   <Node Name="EmptyStatementSyntax" Base="StatementSyntax">
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="EmptyStatement"/>
+    <Kind Name="EmptyStatement" />
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -853,12 +853,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="EqualsValueClause"/>
+    <Kind Name="EqualsValueClause" />
     <Field Name="EqualsToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EqualsToken"/>
+      <Kind Name="EqualsToken" />
     </Field>
     <Field Name="Value" Type="ExpressionSyntax">
       <PropertyComment>
@@ -871,7 +871,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ExpressionStatement"/>
+    <Kind Name="ExpressionStatement" />
     <Field Name="Expression" Type="ExpressionSyntax">
       <PropertyComment>
         <summary></summary>
@@ -881,7 +881,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -889,7 +889,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="FieldAccessExpression"/>
+    <Kind Name="FieldAccessExpression" />
     <Field Name="Expression" Type="ExpressionSyntax">
       <PropertyComment>
         <summary></summary>
@@ -899,13 +899,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DotToken"/>
+      <Kind Name="DotToken" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DotToken"/>
+      <Kind Name="DotToken" />
     </Field>
   </Node>
 
@@ -913,36 +913,36 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ForStatement"/>
+    <Kind Name="ForStatement" />
     <Field Name="ForKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ForKeyword"/>
+      <Kind Name="ForKeyword" />
     </Field>
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Declaration" Type="VariableDeclarationSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="VariableDeclaration"/>
+      <Kind Name="VariableDeclaration" />
     </Field>
     <Field Name="Initializer" Type="ExpressionSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="WhileKeyword"/>
+      <Kind Name="WhileKeyword" />
     </Field>
     <Field Name="FirstSemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
     <Field Name="Condition" Type="ExpressionSyntax">
       <PropertyComment>
@@ -953,7 +953,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
     <Field Name="Incrementor" Type="ExpressionSyntax">
       <PropertyComment>
@@ -964,7 +964,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
     <Field Name="Statement" Type="StatementSyntax">
       <PropertyComment>
@@ -977,12 +977,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="FunctionDeclaration"/>
+    <Kind Name="FunctionDeclaration" />
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -990,18 +990,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="FunctionDefinition"/>
+    <Kind Name="FunctionDefinition" />
     <Field Name="Body" Type="BlockSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="Block"/>
+      <Kind Name="Block" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -1009,7 +1009,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="FunctionInvocationExpression"/>
+    <Kind Name="FunctionInvocationExpression" />
     <Field Name="Name" Type="NameSyntax">
       <PropertyComment>
         <summary></summary>
@@ -1019,8 +1019,8 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ArgumentList"/>
-      <Getter Name="ArgumentListSyntax" Override="true"/>
+      <Kind Name="ArgumentList" />
+      <Getter Name="ArgumentListSyntax" Override="true" />
     </Field>
   </Node>
 
@@ -1028,30 +1028,30 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PredefinedGenericMatrixType"/>
+    <Kind Name="PredefinedGenericMatrixType" />
     <Field Name="MatrixKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="MatrixKeyword"/>
+      <Kind Name="MatrixKeyword" />
     </Field>
     <Field Name="LessThanToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="LessThanToken"/>
+      <Kind Name="LessThanToken" />
     </Field>
     <Field Name="ScalarType" Type="ScalarTypeSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="PredefinedScalarType"/>
+      <Kind Name="PredefinedScalarType" />
     </Field>
     <Field Name="FirstCommaToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CommaToken"/>
+      <Kind Name="CommaToken" />
     </Field>
     <Field Name="RowsToken" Type="SyntaxToken">
       <PropertyComment>
@@ -1062,7 +1062,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CommaToken"/>
+      <Kind Name="CommaToken" />
     </Field>
     <Field Name="ColsToken" Type="SyntaxToken">
       <PropertyComment>
@@ -1073,7 +1073,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="GreaterThanToken"/>
+      <Kind Name="GreaterThanToken" />
     </Field>
   </Node>
 
@@ -1081,30 +1081,30 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PredefinedGenericVectorType"/>
+    <Kind Name="PredefinedGenericVectorType" />
     <Field Name="VectorKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="VectorKeyword"/>
+      <Kind Name="VectorKeyword" />
     </Field>
     <Field Name="LessThanToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="LessThanToken"/>
+      <Kind Name="LessThanToken" />
     </Field>
     <Field Name="ScalarType" Type="ScalarTypeSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="PredefinedScalarType"/>
+      <Kind Name="PredefinedScalarType" />
     </Field>
     <Field Name="CommaToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CommaToken"/>
+      <Kind Name="CommaToken" />
     </Field>
     <Field Name="SizeToken" Type="SyntaxToken">
       <PropertyComment>
@@ -1115,7 +1115,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="GreaterThanToken"/>
+      <Kind Name="GreaterThanToken" />
     </Field>
   </Node>
 
@@ -1123,7 +1123,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IdentifierDeclarationName"/>
+    <Kind Name="IdentifierDeclarationName" />
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -1135,7 +1135,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IdentifierName"/>
+    <Kind Name="IdentifierName" />
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -1147,18 +1147,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IfStatement"/>
+    <Kind Name="IfStatement" />
     <Field Name="IfKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IfKeyword"/>
+      <Kind Name="IfKeyword" />
     </Field>
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Condition" Type="ExpressionSyntax">
       <PropertyComment>
@@ -1169,7 +1169,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
     <Field Name="Statement" Type="StatementSyntax">
       <PropertyComment>
@@ -1180,7 +1180,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ElseClause"/>
+      <Kind Name="ElseClause" />
     </Field>
   </Node>
 
@@ -1188,24 +1188,24 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="InterfaceType"/>
+    <Kind Name="InterfaceType" />
     <Field Name="InterfaceKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="InterfaceKeyword"/>
+      <Kind Name="InterfaceKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Getter Name="NameToken" Override="true"/>
+      <Getter Name="NameToken" Override="true" />
     </Field>
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Methods" Type="List&lt;FunctionDeclarationSyntax&gt;">
       <PropertyComment>
@@ -1216,7 +1216,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -1235,18 +1235,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="LogicalRegisterSpace"/>
+    <Kind Name="LogicalRegisterSpace" />
     <Field Name="CommaToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CommaToken"/>
+      <Kind Name="CommaToken" />
     </Field>
     <Field Name="SpaceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SpaceToken"/>
+      <Kind Name="SpaceToken" />
     </Field>
   </Node>
 
@@ -1254,12 +1254,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="MacroArgumentList"/>
+    <Kind Name="MacroArgumentList" />
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Arguments" Type="SeparatedSyntaxList&lt;MacroArgumentSyntax&gt;">
       <PropertyComment>
@@ -1270,7 +1270,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -1278,7 +1278,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="MacroArgument"/>
+    <Kind Name="MacroArgument" />
     <Field Name="Tokens" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
         <summary></summary>
@@ -1290,7 +1290,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PredefinedMatrixType"/>
+    <Kind Name="PredefinedMatrixType" />
     <Field Name="TypeToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -1302,7 +1302,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="MethodInvocationExpression"/>
+    <Kind Name="MethodInvocationExpression" />
     <Field Name="Target" Type="ExpressionSyntax">
       <PropertyComment>
         <summary></summary>
@@ -1312,7 +1312,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DotToken"/>
+      <Kind Name="DotToken" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -1323,8 +1323,8 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ArgumentList"/>
-      <Getter Name="ArgumentListSyntax" Override="true"/>
+      <Kind Name="ArgumentList" />
+      <Getter Name="ArgumentListSyntax" Override="true" />
     </Field>
   </Node>
 
@@ -1332,12 +1332,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="Namespace"/>
+    <Kind Name="Namespace" />
     <Field Name="NamespaceKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="NamespaceKeyword"/>
+      <Kind Name="NamespaceKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -1348,7 +1348,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Declarations" Type="List&lt;SyntaxNode&gt;">
       <PropertyComment>
@@ -1359,13 +1359,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -1373,7 +1373,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="NumericConstructorInvocationExpression"/>
+    <Kind Name="NumericConstructorInvocationExpression" />
     <Field Name="Type" Type="NumericTypeSyntax">
       <PropertyComment>
         <summary></summary>
@@ -1383,8 +1383,8 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ArgumentList"/>
-      <Getter Name="ArgumentListSyntax" Override="true"/>
+      <Kind Name="ArgumentList" />
+      <Getter Name="ArgumentListSyntax" Override="true" />
     </Field>
   </Node>
 
@@ -1392,12 +1392,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PackOffsetComponentPart"/>
+    <Kind Name="PackOffsetComponentPart" />
     <Field Name="DotToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DotToken"/>
+      <Kind Name="DotToken" />
     </Field>
     <Field Name="Component" Type="SyntaxToken">
       <PropertyComment>
@@ -1410,24 +1410,24 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PackOffsetLocation"/>
+    <Kind Name="PackOffsetLocation" />
     <Field Name="ColonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonToken"/>
+      <Kind Name="ColonToken" />
     </Field>
     <Field Name="PackOffsetKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="PackOffsetKeyword"/>
+      <Kind Name="PackOffsetKeyword" />
     </Field>
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Register" Type="SyntaxToken">
       <PropertyComment>
@@ -1438,13 +1438,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="PackOffsetComponentPart"/>
+      <Kind Name="PackOffsetComponentPart" />
     </Field>
     <Field Name="CloseParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -1452,12 +1452,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ParameterList"/>
+    <Kind Name="ParameterList" />
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Parameters" Type="SeparatedSyntaxList&lt;ParameterSyntax&gt;">
       <PropertyComment>
@@ -1468,7 +1468,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -1476,7 +1476,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="Parameter"/>
+    <Kind Name="Parameter" />
     <Field Name="Attributes" Type="List&lt;AttributeDeclarationSyntaxBase&gt;" />
     <Field Name="Modifiers" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
@@ -1492,7 +1492,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="VariableDeclarator"/>
+      <Kind Name="VariableDeclarator" />
     </Field>
   </Node>
 
@@ -1500,12 +1500,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ParenthesizedExpression"/>
+    <Kind Name="ParenthesizedExpression" />
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Expression" Type="ExpressionSyntax">
       <PropertyComment>
@@ -1516,7 +1516,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -1524,12 +1524,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PassDeclaration"/>
+    <Kind Name="PassDeclaration" />
     <Field Name="PassKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="PassKeyword"/>
+      <Kind Name="PassKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -1540,13 +1540,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="Annotations"/>
+      <Kind Name="Annotations" />
     </Field>
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Statements" Type="List&lt;StatementSyntax&gt;">
       <PropertyComment>
@@ -1557,7 +1557,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -1586,7 +1586,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PredefinedObjectType"/>
+    <Kind Name="PredefinedObjectType" />
     <Field Name="ObjectTypeToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -1596,7 +1596,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="TemplateArgumentList"/>
+      <Kind Name="TemplateArgumentList" />
     </Field>
   </Node>
 
@@ -1620,7 +1620,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="QualifiedDeclarationName"/>
+    <Kind Name="QualifiedDeclarationName" />
     <Field Name="Left" Type="DeclarationNameSyntax">
       <PropertyComment>
         <summary></summary>
@@ -1630,13 +1630,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonColonToken"/>
+      <Kind Name="ColonColonToken" />
     </Field>
     <Field Name="Right" Type="IdentifierDeclarationNameSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IdentifierDeclarationName"/>
+      <Kind Name="IdentifierDeclarationName" />
     </Field>
   </Node>
 
@@ -1644,7 +1644,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="QualifiedName"/>
+    <Kind Name="QualifiedName" />
     <Field Name="Left" Type="NameSyntax">
       <PropertyComment>
         <summary></summary>
@@ -1654,13 +1654,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonColonToken"/>
+      <Kind Name="ColonColonToken" />
     </Field>
     <Field Name="Right" Type="IdentifierNameSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IdentifierName"/>
+      <Kind Name="IdentifierName" />
     </Field>
   </Node>
 
@@ -1668,24 +1668,24 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="RegisterLocation"/>
+    <Kind Name="RegisterLocation" />
     <Field Name="Colon" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonToken"/>
+      <Kind Name="ColonToken" />
     </Field>
     <Field Name="RegisterKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="RegisterKeyword"/>
+      <Kind Name="RegisterKeyword" />
     </Field>
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Register" Type="SyntaxToken">
       <PropertyComment>
@@ -1696,13 +1696,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="LogicalRegisterSpace"/>
+      <Kind Name="LogicalRegisterSpace" />
     </Field>
     <Field Name="CloseParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -1710,12 +1710,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ReturnStatement"/>
+    <Kind Name="ReturnStatement" />
     <Field Name="ReturnKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ReturnKeyword"/>
+      <Kind Name="ReturnKeyword" />
     </Field>
     <Field Name="Expression" Type="ExpressionSyntax">
       <PropertyComment>
@@ -1726,7 +1726,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -1734,18 +1734,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="SamplerStateInitializer"/>
+    <Kind Name="SamplerStateInitializer" />
     <Field Name="EqualsToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EqualsToken"/>
+      <Kind Name="EqualsToken" />
     </Field>
     <Field Name="SamplerStateKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SamplerStateKeyword"/>
+      <Kind Name="SamplerStateKeyword" />
     </Field>
     <Field Name="StateInitializer" Type="StateInitializerSyntax">
       <PropertyComment>
@@ -1758,7 +1758,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PredefinedScalarType"/>
+    <Kind Name="PredefinedScalarType" />
     <Field Name="TypeTokens" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
         <summary></summary>
@@ -1770,12 +1770,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="SemanticName"/>
+    <Kind Name="SemanticName" />
     <Field Name="ColonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ColonToken"/>
+      <Kind Name="ColonToken" />
     </Field>
     <Field Name="Semantic" Type="SyntaxToken">
       <PropertyComment>
@@ -1788,7 +1788,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="SkippedTokensTrivia"/>
+    <Kind Name="SkippedTokensTrivia" />
     <Field Name="Tokens" Type="List&lt;SyntaxToken&gt;" Derived="true">
       <PropertyComment>
         <summary></summary>
@@ -1800,12 +1800,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="StateArrayInitializer"/>
+    <Kind Name="StateArrayInitializer" />
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Initializers" Type="SeparatedSyntaxList&lt;StateInitializerSyntax&gt;">
       <PropertyComment>
@@ -1816,7 +1816,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -1824,12 +1824,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="StateInitializer"/>
+    <Kind Name="StateInitializer" />
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Properties" Type="List&lt;StatePropertySyntax&gt;">
       <PropertyComment>
@@ -1840,7 +1840,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -1848,7 +1848,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="StateProperty"/>
+    <Kind Name="StateProperty" />
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -1858,19 +1858,19 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ArrayRankSpecifier"/>
+      <Kind Name="ArrayRankSpecifier" />
     </Field>
     <Field Name="EqualsToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EqualsToken"/>
+      <Kind Name="EqualsToken" />
     </Field>
     <Field Name="LessThanToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="LessThanToken"/>
+      <Kind Name="LessThanToken" />
     </Field>
     <Field Name="Value" Type="ExpressionSyntax">
       <PropertyComment>
@@ -1881,13 +1881,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="GreaterThanToken"/>
+      <Kind Name="GreaterThanToken" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -1895,7 +1895,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="StringLiteralExpression"/>
+    <Kind Name="StringLiteralExpression" />
     <Field Name="Tokens" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
         <summary></summary>
@@ -1911,25 +1911,25 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="StructKeyword"/>
+      <Kind Name="StructKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Getter Name="NameToken" Override="true"/>
+      <Getter Name="NameToken" Override="true" />
     </Field>
     <Field Name="BaseList" Type="BaseListSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="BaseList"/>
+      <Kind Name="BaseList" />
     </Field>
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Members" Type="List&lt;SyntaxNode&gt;">
       <PropertyComment>
@@ -1940,7 +1940,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -1948,7 +1948,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="SwitchSection"/>
+    <Kind Name="SwitchSection" />
     <Field Name="Labels" Type="List&lt;SwitchLabelSyntax&gt;">
       <PropertyComment>
         <summary></summary>
@@ -1965,18 +1965,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="SwitchStatement"/>
+    <Kind Name="SwitchStatement" />
     <Field Name="SwitchKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SwitchKeyword"/>
+      <Kind Name="SwitchKeyword" />
     </Field>
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Expression" Type="ExpressionSyntax">
       <PropertyComment>
@@ -1987,13 +1987,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Sections" Type="List&lt;SwitchSectionSyntax&gt;">
       <PropertyComment>
@@ -2004,7 +2004,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -2012,12 +2012,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="TemplateArgumentList"/>
+    <Kind Name="TemplateArgumentList" />
     <Field Name="LessThanToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="LessThanToken"/>
+      <Kind Name="LessThanToken" />
     </Field>
     <Field Name="Arguments" Type="SeparatedSyntaxList&lt;ExpressionSyntax&gt;">
       <PropertyComment>
@@ -2028,7 +2028,42 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="GreaterThanToken"/>
+      <Kind Name="GreaterThanToken" />
+    </Field>
+  </Node>
+
+  <Node Name="MessiahTechniqueSyntax" Base="SyntaxNode">
+    <TypeComment>
+      <summary></summary>
+    </TypeComment>
+    <Kind Name="MessiahTechniqueDeclaration" />
+    <Field Name="TechniqueKeyword" Type="SyntaxToken">
+      <PropertyComment>
+        <summary></summary>
+      </PropertyComment>
+      <Kind Name="TechniqueKeyword" />
+    </Field>
+    <Field Name="Name" Type="SyntaxToken">
+      <PropertyComment>
+        <summary></summary>
+      </PropertyComment>
+    </Field>
+    <Field Name="OpenBraceToken" Type="SyntaxToken">
+      <PropertyComment>
+        <summary></summary>
+      </PropertyComment>
+      <Kind Name="OpenBraceToken" />
+    </Field>
+    <Field Name="Properties" Type="List&lt;StatePropertySyntax&gt;">
+      <PropertyComment>
+        <summary></summary>
+      </PropertyComment>
+    </Field>
+    <Field Name="CloseBraceToken" Type="SyntaxToken">
+      <PropertyComment>
+        <summary></summary>
+      </PropertyComment>
+      <Kind Name="CloseBraceToken" />
     </Field>
   </Node>
 
@@ -2036,12 +2071,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="TechniqueDeclaration"/>
+    <Kind Name="TechniqueDeclaration" />
     <Field Name="TechniqueKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="TechniqueKeyword"/>
+      <Kind Name="TechniqueKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -2052,13 +2087,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="Annotations"/>
+      <Kind Name="Annotations" />
     </Field>
     <Field Name="OpenBraceToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenBraceToken"/>
+      <Kind Name="OpenBraceToken" />
     </Field>
     <Field Name="Passes" Type="List&lt;PassSyntax&gt;">
       <PropertyComment>
@@ -2069,13 +2104,13 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseBraceToken"/>
+      <Kind Name="CloseBraceToken" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -2083,7 +2118,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="TypeAlias"/>
+    <Kind Name="TypeAlias" />
     <Field Name="Identifier" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -2103,7 +2138,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="Annotations"/>
+      <Kind Name="Annotations" />
     </Field>
   </Node>
 
@@ -2111,7 +2146,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="TypeDeclarationStatement"/>
+    <Kind Name="TypeDeclarationStatement" />
     <Field Name="Modifiers" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
         <summary></summary>
@@ -2126,7 +2161,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -2134,12 +2169,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="TypedefStatement"/>
+    <Kind Name="TypedefStatement" />
     <Field Name="TypedefKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="TypedefKeyword"/>
+      <Kind Name="TypedefKeyword" />
     </Field>
     <Field Name="Modifiers" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
@@ -2160,7 +2195,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -2168,18 +2203,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="VariableDeclarationStatement"/>
+    <Kind Name="VariableDeclarationStatement" />
     <Field Name="Declaration" Type="VariableDeclarationSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="VariableDeclaration"/>
+      <Kind Name="VariableDeclaration" />
     </Field>
     <Field Name="SemicolonToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="SemicolonToken"/>
+      <Kind Name="SemicolonToken" />
     </Field>
   </Node>
 
@@ -2187,7 +2222,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="VariableDeclaration"/>
+    <Kind Name="VariableDeclaration" />
     <Field Name="Modifiers" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
         <summary></summary>
@@ -2209,7 +2244,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="VariableDeclarator"/>
+    <Kind Name="VariableDeclarator" />
     <Field Name="Identifier" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -2229,7 +2264,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="Annotations"/>
+      <Kind Name="Annotations" />
     </Field>
     <Field Name="Initializer" Type="InitializerSyntax">
       <PropertyComment>
@@ -2242,7 +2277,7 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PredefinedVectorType"/>
+    <Kind Name="PredefinedVectorType" />
     <Field Name="TypeToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
@@ -2254,18 +2289,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="WhileStatement"/>
+    <Kind Name="WhileStatement" />
     <Field Name="WhileKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="WhileKeyword"/>
+      <Kind Name="WhileKeyword" />
     </Field>
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Condition" Type="ExpressionSyntax">
       <PropertyComment>
@@ -2276,7 +2311,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
     <Field Name="Statement" Type="StatementSyntax">
       <PropertyComment>
@@ -2286,18 +2321,17 @@
   </Node>
 
 
-
   <!-- Preprocessor directives -->
   <Node Name="BadDirectiveTriviaSyntax" Base="DirectiveTriviaSyntax">
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="BadDirectiveTrivia"/>
+    <Kind Name="BadDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="Identifier" Type="SyntaxToken">
       <PropertyComment>
@@ -2308,7 +2342,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2321,18 +2355,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IfDirectiveTrivia"/>
+    <Kind Name="IfDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="IfKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IfKeyword"/>
+      <Kind Name="IfKeyword" />
     </Field>
     <Field Name="Condition" Type="ExpressionSyntax" Override="true">
       <PropertyComment>
@@ -2343,7 +2377,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2366,18 +2400,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IfDefDirectiveTrivia"/>
+    <Kind Name="IfDefDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="IfDefKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IfDefKeyword"/>
+      <Kind Name="IfDefKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -2388,7 +2422,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2411,18 +2445,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IfNDefDirectiveTrivia"/>
+    <Kind Name="IfNDefDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="IfNDefKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IfNDefKeyword"/>
+      <Kind Name="IfNDefKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -2433,7 +2467,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2456,18 +2490,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ElifDirectiveTrivia"/>
+    <Kind Name="ElifDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="ElifKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ElifKeyword"/>
+      <Kind Name="ElifKeyword" />
     </Field>
     <Field Name="Condition" Type="ExpressionSyntax" Override="true">
       <PropertyComment>
@@ -2478,7 +2512,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2501,24 +2535,24 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ElseDirectiveTrivia"/>
+    <Kind Name="ElseDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="ElseKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ElseKeyword"/>
+      <Kind Name="ElseKeyword" />
     </Field>
     <Field Name="EndOfDirectiveToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2536,24 +2570,24 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="EndIfDirectiveTrivia"/>
+    <Kind Name="EndIfDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="EndIfKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndIfKeyword"/>
+      <Kind Name="EndIfKeyword" />
     </Field>
     <Field Name="EndOfDirectiveToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2566,36 +2600,36 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ObjectLikeDefineDirectiveTrivia"/>
+    <Kind Name="ObjectLikeDefineDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="DefineKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DefineKeyword"/>
+      <Kind Name="DefineKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Getter Name="MacroName" Override="true"/>
+      <Getter Name="MacroName" Override="true" />
     </Field>
     <Field Name="Body" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Getter Name="MacroBody" Override="true"/>
+      <Getter Name="MacroBody" Override="true" />
     </Field>
     <Field Name="EndOfDirectiveToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2608,42 +2642,42 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="FunctionLikeDefineDirectiveTrivia"/>
+    <Kind Name="FunctionLikeDefineDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="DefineKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="DefineKeyword"/>
+      <Kind Name="DefineKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Getter Name="MacroName" Override="true"/>
+      <Getter Name="MacroName" Override="true" />
     </Field>
     <Field Name="Parameters" Type="FunctionLikeDefineDirectiveParameterListSyntax">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="FunctionLikeDefineDirectiveParameterList"/>
+      <Kind Name="FunctionLikeDefineDirectiveParameterList" />
     </Field>
     <Field Name="Body" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Getter Name="MacroBody" Override="true"/>
+      <Getter Name="MacroBody" Override="true" />
     </Field>
     <Field Name="EndOfDirectiveToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2656,12 +2690,12 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="FunctionLikeDefineDirectiveParameterList"/>
+    <Kind Name="FunctionLikeDefineDirectiveParameterList" />
     <Field Name="OpenParenToken" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="OpenParenToken"/>
+      <Kind Name="OpenParenToken" />
     </Field>
     <Field Name="Parameters" Type="SeparatedSyntaxList&lt;SyntaxToken&gt;">
       <PropertyComment>
@@ -2672,7 +2706,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="CloseParenToken"/>
+      <Kind Name="CloseParenToken" />
     </Field>
   </Node>
 
@@ -2680,18 +2714,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="IncludeDirectiveTrivia"/>
+    <Kind Name="IncludeDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="IncludeKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="IncludeKeyword"/>
+      <Kind Name="IncludeKeyword" />
     </Field>
     <Field Name="Filename" Type="SyntaxToken">
       <PropertyComment>
@@ -2702,7 +2736,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2715,18 +2749,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="UndefDirectiveTrivia"/>
+    <Kind Name="UndefDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="UndefKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="UndefKeyword"/>
+      <Kind Name="UndefKeyword" />
     </Field>
     <Field Name="Name" Type="SyntaxToken">
       <PropertyComment>
@@ -2737,7 +2771,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2750,18 +2784,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="LineDirectiveTrivia"/>
+    <Kind Name="LineDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="LineKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="LineKeyword"/>
+      <Kind Name="LineKeyword" />
     </Field>
     <Field Name="Line" Type="SyntaxToken">
       <PropertyComment>
@@ -2777,7 +2811,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2790,18 +2824,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="ErrorDirectiveTrivia"/>
+    <Kind Name="ErrorDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="ErrorKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="ErrorKeyword"/>
+      <Kind Name="ErrorKeyword" />
     </Field>
     <Field Name="TokenString" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
@@ -2812,7 +2846,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>
@@ -2825,18 +2859,18 @@
     <TypeComment>
       <summary></summary>
     </TypeComment>
-    <Kind Name="PragmaDirectiveTrivia"/>
+    <Kind Name="PragmaDirectiveTrivia" />
     <Field Name="HashToken" Type="SyntaxToken" Override="true">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="HashToken"/>
+      <Kind Name="HashToken" />
     </Field>
     <Field Name="PragmaKeyword" Type="SyntaxToken">
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="PragmaKeyword"/>
+      <Kind Name="PragmaKeyword" />
     </Field>
     <Field Name="TokenString" Type="List&lt;SyntaxToken&gt;">
       <PropertyComment>
@@ -2847,7 +2881,7 @@
       <PropertyComment>
         <summary></summary>
       </PropertyComment>
-      <Kind Name="EndOfDirectiveToken"/>
+      <Kind Name="EndOfDirectiveToken" />
     </Field>
     <Field Name="IsActive" Type="bool" Override="true">
       <PropertyComment>

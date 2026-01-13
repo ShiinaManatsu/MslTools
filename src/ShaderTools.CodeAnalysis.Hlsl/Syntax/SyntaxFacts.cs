@@ -2591,7 +2591,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Syntax
                     return SyntaxKind.TBufferKeyword;
                 case "technique":
                 case "Technique":
-                    return SyntaxKind.TechniqueKeyword;
+                    return SyntaxKind.MessiahTechniqueDeclaration;
                 case "technique10":
                     return SyntaxKind.Technique10Keyword;
                 case "technique11":

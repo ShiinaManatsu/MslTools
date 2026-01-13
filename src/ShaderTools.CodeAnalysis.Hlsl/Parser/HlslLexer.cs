@@ -891,7 +891,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
                     if (Char.IsLetter(_charReader.Current) || _charReader.Current == '_')
                         ReadIdentifierOrKeyword();
                     else if (_charReader.Current == '@')
-                        ReadTokenName();
+                        ReadToggleTokenName();
                     else if (Char.IsDigit(_charReader.Current))
                         ReadNumber();
                     else
@@ -1309,7 +1309,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
 
             return val;
         }
-        private void ReadTokenName()
+        private void ReadToggleTokenName()
         {
             var start = _charReader.Position;
 

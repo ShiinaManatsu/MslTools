@@ -45,6 +45,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
                 case BoundNodeKind.BoundToggleExpression:
                     VisitToggle((BoundToggle)node);
                     break;
+                case BoundNodeKind.MessiahTechnique:
+                    VisitMessiahTechnique((BoundMessiahTechnique)node);
+                    break;
                 default:
                     throw new InvalidOperationException(node.Kind.ToString());
             }
@@ -96,6 +99,17 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
         protected virtual void VisitToggle(BoundToggle node)
         {
 
+        }
+
+        protected virtual void VisitMessiahTechnique(BoundMessiahTechnique node)
+        {
+            if (node.Expressions != null)
+            {
+                foreach (var expression in node.Expressions)
+                {
+                    VisitExpression(expression);
+                }
+            }
         }
 
         protected virtual void VisitRegisterLocation(BoundRegisterLocation node)

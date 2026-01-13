@@ -719,6 +719,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Syntax
         ClassType,
         InterfaceType,
         ConstantBufferDeclaration,
+        MessiahTechniqueDeclaration,
         TechniqueDeclaration,
         PassDeclaration,
 

@@ -414,6 +414,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
                     case SyntaxKind.TBufferKeyword:
                         declarations.Add(ParseConstantBuffer());
                         break;
+                    case SyntaxKind.MessiahTechniqueDeclaration:
+                        declarations.Add(ParseMessiahTechnique());
+                        break;
                     case SyntaxKind.TechniqueKeyword:
                     case SyntaxKind.Technique10Keyword:
                     case SyntaxKind.Technique11Keyword:

@@ -310,6 +310,39 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Parser
             return syntax;
         }
 
+        private MessiahTechniqueSyntax ParseMessiahTechnique()
+        {
+            var technique = NextToken();
+
+            SyntaxToken name = null;
+            if (Current.Kind == SyntaxKind.IdentifierToken)
+                name = Match(SyntaxKind.IdentifierToken);
+
+            var openBrace = Match(SyntaxKind.OpenBraceToken);
+
+            var properties = new List<StatePropertySyntax>();
+            while (Current.Kind != SyntaxKind.CloseBraceToken)
+            {
+                if (IsPossibleStateProperty())
+                {
+                    properties.Add(ParseStateProperty());
+                }
+                else
+                {
+                    var action = SkipBadTokens(
+                        p => !p.IsPossibleStateProperty(),
+                        p => p.IsTerminator(),
+                        SyntaxKind.CloseBraceToken);
+                    if (action == PostSkipAction.Abort)
+                        break;
+                }
+            }
+
+            var closeBrace = Match(SyntaxKind.CloseBraceToken);
+
+            return new MessiahTechniqueSyntax(technique, name, openBrace, properties, closeBrace);
+        }
+
         private TechniqueSyntax ParseTechnique()
         {
             var technique = NextToken();
