@@ -89,6 +89,7 @@ namespace ShaderTools.LanguageServer
                 .AddHandler(new TextDocumentSyncHandler(_workspace, documentSelector))
                 .AddHandler(new CompletionHandler(_workspace, documentSelector))
                 .AddHandler(new DefinitionHandler(_workspace, documentSelector))
+                .AddHandler(new FoldingRangeHandler(_workspace, documentSelector))
                 .AddHandler(new WorkspaceSymbolsHandler(_workspace))
                 .AddHandler(new DocumentHighlightHandler(_workspace, documentSelector))
                 .AddHandler(new DocumentSymbolsHandler(_workspace, documentSelector))
