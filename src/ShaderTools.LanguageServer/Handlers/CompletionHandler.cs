@@ -25,7 +25,7 @@ namespace ShaderTools.LanguageServer.Handlers
             _registrationOptions = new CompletionRegistrationOptions
             {
                 DocumentSelector = documentSelector,
-                TriggerCharacters = new Container<string>(".", ":"),
+                TriggerCharacters = new Container<string>(".", ":", " ", "#", "+", "-", "*", "/", ",", "<", "("),
                 ResolveProvider = false
             };
         }
