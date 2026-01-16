@@ -19,6 +19,7 @@
         IntrinsicScalarType,
         Semantic,
         Technique,
+        MessiahTechnique,
         Attribute,
         Toggle,
         TypeAlias

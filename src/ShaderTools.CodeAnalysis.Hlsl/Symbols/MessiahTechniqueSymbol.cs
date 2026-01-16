@@ -15,7 +15,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Symbols
         public ImmutableArray<ISymbol> GetMembers() => ImmutableArray<ISymbol>.Empty; // TODO
 
         internal MessiahTechniqueSymbol(MessiahTechniqueSyntax syntax)
-            : base(SymbolKind.Technique, syntax.Name?.Text, string.Empty, null)
+            : base(SymbolKind.MessiahTechnique, syntax.Name?.Text, string.Empty, null)
         {
             SourceTree = syntax.SyntaxTree;
             Locations = syntax.Name != null

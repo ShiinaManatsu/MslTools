@@ -46,6 +46,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Symbols.Markup
                 case SymbolKind.Technique:
                     markup.AppendTechnique((TechniqueSymbol) symbol, format);
                     break;
+                case SymbolKind.MessiahTechnique:
+                    markup.AppendMessiahTechnique((MessiahTechniqueSymbol) symbol, format);
+                    break;
                 case SymbolKind.TypeAlias:
                     markup.AppendTypeAlias((TypeAliasSymbol) symbol, format);
                     break;
@@ -310,6 +313,17 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Symbols.Markup
         }
 
         private static void AppendTechnique(this ICollection<SymbolMarkupToken> markup, TechniqueSymbol symbol, SymbolDisplayFormat format)
+        {
+            if (format == SymbolDisplayFormat.QuickInfo)
+            {
+                markup.AppendKeyword("technique");
+                markup.AppendSpace();
+            }
+
+            markup.AppendName(SymbolMarkupKind.TechniqueName, symbol.Name);
+        }
+
+        private static void AppendMessiahTechnique(this ICollection<SymbolMarkupToken> markup, MessiahTechniqueSymbol symbol, SymbolDisplayFormat format)
         {
             if (format == SymbolDisplayFormat.QuickInfo)
             {

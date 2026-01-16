@@ -84,36 +84,30 @@ namespace ShaderTools.CodeAnalysis.NavigateTo
 
         private static string GetItemKind(SymbolKind symbolKind)
         {
-            switch (symbolKind)
+            return symbolKind switch
             {
-                case SymbolKind.Class:
-                case SymbolKind.IntrinsicObjectType:
-                case SymbolKind.IntrinsicVectorType:
-                case SymbolKind.IntrinsicMatrixType:
-                case SymbolKind.IntrinsicScalarType:
-                    return NavigateToItemKind.Class;
-                case SymbolKind.Variable:
-                case SymbolKind.Field:
-                case SymbolKind.Parameter:
-                case SymbolKind.TypeAlias:
-                case SymbolKind.Attribute:
-                    return NavigateToItemKind.Field;
-                case SymbolKind.Interface:
-                    return NavigateToItemKind.Interface;
-                case SymbolKind.Function:
-                    return NavigateToItemKind.Method;
-                case SymbolKind.Namespace:
-                    return NavigateToItemKind.Module;
-                case SymbolKind.ConstantBuffer:
-                case SymbolKind.Toggle:                        
-                case SymbolKind.Struct:
-                case SymbolKind.Technique:
-                    return NavigateToItemKind.Structure;
-                case SymbolKind.Array:
-                    return NavigateToItemKind.OtherSymbol;
-                default:
-                    return Contract.FailWithReturn<string>("Unknown declaration kind " + symbolKind);
-            }
+                SymbolKind.Class or
+                    SymbolKind.IntrinsicObjectType or
+                    SymbolKind.IntrinsicVectorType or
+                    SymbolKind.IntrinsicMatrixType or
+                    SymbolKind.IntrinsicScalarType => NavigateToItemKind.Class,
+                SymbolKind.Variable or
+                    SymbolKind.Field or
+                    SymbolKind.Parameter or
+                    SymbolKind.TypeAlias or
+                    SymbolKind.Attribute => NavigateToItemKind.Field,
+                SymbolKind.Interface => NavigateToItemKind.Interface,
+                SymbolKind.Function => NavigateToItemKind.Method,
+                SymbolKind.Namespace => NavigateToItemKind.Module,
+                SymbolKind.ConstantBuffer or
+                    SymbolKind.Toggle or
+                    SymbolKind.Struct or
+                    SymbolKind.Technique or
+                    SymbolKind.MessiahTechnique =>
+                    NavigateToItemKind.Structure,
+                SymbolKind.Array => NavigateToItemKind.OtherSymbol,
+                _ => Contract.FailWithReturn<string>("Unknown declaration kind " + symbolKind)
+            };
         }
     }
 }

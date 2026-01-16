@@ -15,51 +15,30 @@ namespace ShaderTools.CodeAnalysis.Shared.Extensions
     {
         public static Glyph GetGlyph(this ISymbol symbol)
         {
-            switch (symbol.Kind)
+            return symbol.Kind switch
             {
-                case SymbolKind.Array:
-                    return Glyph.Class;
-                case SymbolKind.Namespace:
-                    return Glyph.Namespace;
-                case SymbolKind.Struct:
-                    return Glyph.Structure;
-                case SymbolKind.Class:
-                    return Glyph.Class;
-                case SymbolKind.Interface:
-                    return Glyph.Interface;
-                case SymbolKind.Field:
-                    return Glyph.Field;
-                case SymbolKind.Function:
-                    return Glyph.Method;
-                case SymbolKind.Variable:
-                    return Glyph.Local; // Not quite right.
-                case SymbolKind.Parameter:
-                    return Glyph.Parameter;
-                case SymbolKind.Indexer:
-                    return Glyph.Method;
-                case SymbolKind.IntrinsicObjectType:
-                    return Glyph.IntrinsicClass;
-                case SymbolKind.IntrinsicVectorType:
-                    return Glyph.IntrinsicStruct;
-                case SymbolKind.IntrinsicMatrixType:
-                    return Glyph.IntrinsicStruct;
-                case SymbolKind.IntrinsicScalarType:
-                    return Glyph.IntrinsicStruct;
-                case SymbolKind.Semantic:
-                    return Glyph.Constant;
-                case SymbolKind.Technique:
-                    return Glyph.Module;
-                case SymbolKind.Attribute:
-                    return Glyph.Method;
-                case SymbolKind.ConstantBuffer:
-                    return Glyph.Structure;
-                case SymbolKind.TypeAlias:
-                    return Glyph.Typedef;
-                case SymbolKind.Toggle:
-                    return Glyph.Toggle;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                SymbolKind.Array => Glyph.Class,
+                SymbolKind.Namespace => Glyph.Namespace,
+                SymbolKind.Struct => Glyph.Structure,
+                SymbolKind.Class => Glyph.Class,
+                SymbolKind.Interface => Glyph.Interface,
+                SymbolKind.Field => Glyph.Field,
+                SymbolKind.Function => Glyph.Method,
+                SymbolKind.Variable => Glyph.Local, // Not quite right.
+                SymbolKind.Parameter => Glyph.Parameter,
+                SymbolKind.Indexer => Glyph.Method,
+                SymbolKind.IntrinsicObjectType => Glyph.IntrinsicClass,
+                SymbolKind.IntrinsicVectorType => Glyph.IntrinsicStruct,
+                SymbolKind.IntrinsicMatrixType => Glyph.IntrinsicStruct,
+                SymbolKind.IntrinsicScalarType => Glyph.IntrinsicStruct,
+                SymbolKind.Semantic => Glyph.Constant,
+                SymbolKind.Technique or SymbolKind.MessiahTechnique => Glyph.Module,
+                SymbolKind.Attribute => Glyph.Method,
+                SymbolKind.ConstantBuffer => Glyph.Structure,
+                SymbolKind.TypeAlias => Glyph.Typedef,
+                SymbolKind.Toggle => Glyph.Toggle,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         public static string GetFullyQualifiedName(this ISymbol symbol)
