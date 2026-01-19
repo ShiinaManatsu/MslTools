@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -46,7 +47,7 @@ namespace ShaderTools.LanguageServer.Handlers
                 trigger = CompletionTrigger.Invoke;
             }
 
-            var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token);
+            var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token).ConfigureAwait(false);
             if (completionList == null)
             {
                 return new CompletionList();
@@ -54,13 +55,13 @@ namespace ShaderTools.LanguageServer.Handlers
 
             var completionItems = completionList.Items
                 .AsParallel()
-                .Select(x => ConvertCompletionItem(document, completionList.Rules, completionList.Rules.DefaultCommitCharacters.Select(x => x.ToString()).ToArray(), x))
+                .Select(x => ConvertCompletionItem(document, x))
                 .ToArray();
 
             return completionItems;
         }
 
-        private static CompletionItem ConvertCompletionItem(Document document, Microsoft.CodeAnalysis.Completion.CompletionRules completionRules, Container<string> commitCharacters, CodeAnalysis.Completion.CompletionItem item)
+        private static CompletionItem ConvertCompletionItem(Document document, CodeAnalysis.Completion.CompletionItem item)
         {
             var description = CommonCompletionItem.GetDescription(item);
 
@@ -100,8 +101,6 @@ namespace ShaderTools.LanguageServer.Handlers
                 },
                 Detail = detail,
                 Documentation = documentation,
-                //CommitCharacters = completionRules.DefaultCommitCharacters.Select(x => x.ToString()).ToArray()
-                CommitCharacters = commitCharacters
             };
         }
 
