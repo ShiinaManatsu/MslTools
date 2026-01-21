@@ -21,9 +21,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.SymbolSearch
             if (semanticModel == null)
                 throw new ArgumentNullException(nameof(semanticModel));
 
-            var syntaxTreeRoot = (SyntaxNode) semanticModel.SyntaxTree.Root;
+            var syntaxTreeRoot = (SyntaxNode)semanticModel.SyntaxTree.Root;
             return syntaxTreeRoot.FindNodes(position)
-                .SelectMany(n => GetSymbolSpans((SemanticModel) semanticModel, n))
+                .SelectMany(n => GetSymbolSpans((SemanticModel)semanticModel, n))
                 .Where(s => s.Span.File.IsRootFile && s.SourceRange.ContainsOrTouches(position))
                 .Select(s => s).Cast<SymbolSpan?>().FirstOrDefault();
         }
@@ -36,12 +36,17 @@ namespace ShaderTools.CodeAnalysis.Hlsl.SymbolSearch
             if (symbol == null)
                 throw new ArgumentNullException(nameof(symbol));
 
-            var syntaxTreeRoot = (SyntaxNode) semanticModel.SyntaxTree.Root;
+            var syntaxTreeRoot = (SyntaxNode)semanticModel.SyntaxTree.Root;
 
-            return (from n in syntaxTreeRoot.DescendantNodes()
-                   from s in GetSymbolSpans((SemanticModel) semanticModel, (SyntaxNode) n)
-                   where s.Symbol.Equals(symbol)
-                   select s).ToImmutableArray();
+            return
+            [
+                ..syntaxTreeRoot.DescendantNodes()
+                    .AsParallel()
+                    .SelectMany(n => GetSymbolSpans((SemanticModel)semanticModel, (SyntaxNode)n),
+                        (n, s) => new { n, s })
+                    .Where(@t => @t.s.Symbol.Equals(symbol))
+                    .Select(@t => @t.s)
+            ];
         }
 
         private static IEnumerable<SymbolSpan> GetSymbolSpans(SemanticModel semanticModel, SyntaxNode node)
@@ -50,74 +55,81 @@ namespace ShaderTools.CodeAnalysis.Hlsl.SymbolSearch
             {
                 case SyntaxKind.VariableDeclarator:
                 {
-                    var expression = (VariableDeclaratorSyntax) node;
+                    var expression = (VariableDeclaratorSyntax)node;
                     var symbol = semanticModel.GetDeclaredSymbol(expression);
                     if (symbol != null)
-                        yield return SymbolSpan.CreateDefinition(symbol, expression.Identifier.SourceRange, expression.Identifier.FileSpan);
+                        yield return SymbolSpan.CreateDefinition(symbol, expression.Identifier.SourceRange,
+                            expression.Identifier.FileSpan);
                     break;
                 }
                 case SyntaxKind.ClassType:
                 case SyntaxKind.StructType:
                 {
-                    var expression = (StructTypeSyntax) node;
+                    var expression = (StructTypeSyntax)node;
                     var symbol = semanticModel.GetDeclaredSymbol(expression);
                     if (symbol != null && expression.Name != null)
-                        yield return SymbolSpan.CreateDefinition(symbol, expression.Name.SourceRange, expression.Name.FileSpan);
+                        yield return SymbolSpan.CreateDefinition(symbol, expression.Name.SourceRange,
+                            expression.Name.FileSpan);
                     break;
                 }
                 case SyntaxKind.InterfaceType:
                 {
-                    var expression = (InterfaceTypeSyntax) node;
+                    var expression = (InterfaceTypeSyntax)node;
                     var symbol = semanticModel.GetDeclaredSymbol(expression);
                     if (symbol != null)
-                        yield return SymbolSpan.CreateDefinition(symbol, expression.Name.SourceRange, expression.Name.FileSpan);
+                        yield return SymbolSpan.CreateDefinition(symbol, expression.Name.SourceRange,
+                            expression.Name.FileSpan);
                     break;
                 }
                 case SyntaxKind.IdentifierName:
                 {
-                    var expression = (IdentifierNameSyntax) node;
+                    var expression = (IdentifierNameSyntax)node;
                     var symbol = semanticModel.GetSymbol(expression);
                     if (symbol != null)
-                        yield return SymbolSpan.CreateReference(symbol, expression.Name.SourceRange, expression.Name.FileSpan);
+                        yield return SymbolSpan.CreateReference(symbol, expression.Name.SourceRange,
+                            expression.Name.FileSpan);
                     break;
                 }
                 case SyntaxKind.IdentifierDeclarationName:
                 {
-                    var expression = (IdentifierDeclarationNameSyntax) node;
+                    var expression = (IdentifierDeclarationNameSyntax)node;
                     var symbol = semanticModel.GetSymbol(expression);
                     if (symbol != null)
-                        yield return SymbolSpan.CreateDefinition(symbol, expression.Name.SourceRange, expression.Name.FileSpan);
+                        yield return SymbolSpan.CreateDefinition(symbol, expression.Name.SourceRange,
+                            expression.Name.FileSpan);
                     break;
                 }
                 case SyntaxKind.FieldAccessExpression:
                 {
-                    var expression = (FieldAccessExpressionSyntax) node;
+                    var expression = (FieldAccessExpressionSyntax)node;
                     var symbol = semanticModel.GetSymbol(expression);
                     if (symbol != null)
-                        yield return SymbolSpan.CreateReference(symbol, expression.Name.SourceRange, expression.Name.FileSpan);
+                        yield return SymbolSpan.CreateReference(symbol, expression.Name.SourceRange,
+                            expression.Name.FileSpan);
                     break;
                 }
                 case SyntaxKind.MethodInvocationExpression:
                 {
-                    var expression = (MethodInvocationExpressionSyntax) node;
+                    var expression = (MethodInvocationExpressionSyntax)node;
                     var symbol = semanticModel.GetSymbol(expression);
                     if (symbol != null)
-                        yield return SymbolSpan.CreateReference(symbol, expression.Name.SourceRange, expression.Name.FileSpan);
+                        yield return SymbolSpan.CreateReference(symbol, expression.Name.SourceRange,
+                            expression.Name.FileSpan);
                     break;
                 }
                 case SyntaxKind.FunctionInvocationExpression:
                 {
-                    var expression = (FunctionInvocationExpressionSyntax) node;
+                    var expression = (FunctionInvocationExpressionSyntax)node;
                     var symbol = semanticModel.GetSymbol(expression);
                     if (symbol != null)
-                        yield return SymbolSpan.CreateReference(symbol, 
-                            expression.Name.GetUnqualifiedName().Name.SourceRange, 
+                        yield return SymbolSpan.CreateReference(symbol,
+                            expression.Name.GetUnqualifiedName().Name.SourceRange,
                             expression.Name.GetUnqualifiedName().Name.FileSpan);
                     break;
                 }
                 case SyntaxKind.FunctionDefinition:
                 {
-                    var expression = (FunctionDefinitionSyntax) node;
+                    var expression = (FunctionDefinitionSyntax)node;
                     var symbol = semanticModel.GetDeclaredSymbol(expression);
                     if (symbol != null)
                         yield return SymbolSpan.CreateDefinition(symbol,
@@ -127,7 +139,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.SymbolSearch
                 }
                 case SyntaxKind.FunctionDeclaration:
                 {
-                    var expression = (FunctionDeclarationSyntax) node;
+                    var expression = (FunctionDeclarationSyntax)node;
                     var symbol = semanticModel.GetDeclaredSymbol(expression);
                     if (symbol != null)
                         yield return SymbolSpan.CreateDefinition(symbol,

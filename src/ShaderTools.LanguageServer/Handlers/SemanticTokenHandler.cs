@@ -117,15 +117,13 @@ namespace ShaderTools.LanguageServer.Handlers
             CancellationToken cancellationToken)
         {
             var document = _workspace.GetDocument(identifier.TextDocument.Uri);
-            var ast = await document.GetSyntaxTreeAsync(cancellationToken).ConfigureAwait(false);
+            var syntaxTree = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             var classificationService = document?.LanguageServices.GetService<IClassificationService>();
 
             if (classificationService == null)
             {
                 return;
             }
-
-            var syntaxTree = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
 
             var classifiedSpans = new List<ClassifiedSpan>();
 

@@ -23,7 +23,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
 
         public override async Task ProvideCompletionsAsync(CompletionContext context)
         {
-            var syntaxTree = await context.Document.GetSyntaxTreeAsync(context.CancellationToken).ConfigureAwait(false);
+            var syntaxTree = await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false);
             var sourceLocation = syntaxTree.MapRootFilePosition(context.Position);
             var token = ((SyntaxNode) syntaxTree.Root).FindTokenOnLeft(sourceLocation);
 
@@ -41,7 +41,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
             var parentStruct = semanticNode.Ancestors().OfType<StructTypeSyntax>().FirstOrDefault();
             var structUsage = GuessUsage(parentStruct);
 
-            var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
+            var semanticModel = await context.Document.GetSemanticModelWithCachedAsync(context.CancellationToken).ConfigureAwait(false);
 
             var availableSemantics = semanticModel
                 .LookupSymbols(semanticNode.Semantic.SourceRange.Start)

@@ -1,5 +1,7 @@
-using System.Collections.Immutable;
+using Microsoft.CodeAnalysis.Text;
 using ShaderTools.CodeAnalysis.Hlsl.Symbols;
+using ShaderTools.CodeAnalysis.Hlsl.Syntax;
+using System.Collections.Immutable;
 
 namespace ShaderTools.CodeAnalysis.Hlsl.Binding.BoundNodes
 {

@@ -14,7 +14,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Windows.Media.Protection.PlayReady;
 
 namespace ShaderTools.LanguageServer
 {
@@ -52,35 +51,25 @@ namespace ShaderTools.LanguageServer
                 ? await _diagnosticService.GetDiagnosticsAsync(document.Id, CancellationToken.None)
                 : ImmutableArray<MappedDiagnostic>.Empty;
 
-            var reportScope = await _server.Configuration.GetConfiguration([new ConfigurationItem { Section = "hlsl-client" }]).ConfigureAwait(false);
+            var reportScope = await _server.Configuration
+                .GetConfiguration([new ConfigurationItem { Section = "hlsl-client" }]).ConfigureAwait(false);
 
-            var activeFileOnly = false;
-            var reportTruncation = false;
-            try
-            {
-                if (reportScope.AsEnumerable().ToDictionary()["hlsl-client:diagnostic:reportScope"] == "active")
-                {
-                    activeFileOnly = true;
-                }
-                if (reportScope.AsEnumerable().ToDictionary()["hlsl-client:diagnostic:types:reportImplicitTruncation"] == "True")
-                {
-                    reportTruncation = true;
-                }
-            }
-            catch
-            {
-                // ignored
-            }
+            bool activeFileOnly =
+                await Helpers.GetConfigurationAsync<string>(_server, "hlsl-client.diagnostic.reportScope") == "active";
+            bool reportTruncation =
+                await Helpers.GetConfigurationAsync<bool>(_server,
+                    "hlsl-client.diagnostic.types.reportImplicitTruncation");
 
             var diagnosticsGroupedByFile = diagnostics
-                .Where(x => x.FileSpan.File.FilePath == document.FilePath || !activeFileOnly)
+                .Where(x => x.FileSpan.File.FilePath == document!.FilePath || !activeFileOnly)
                 .Where(x => x.Diagnostic.Descriptor.Code != (int)DiagnosticId.ImplicitTruncation || reportTruncation)
                 .GroupBy(x => x.FileSpan.File.FilePath)
-                .ToDictionary(x => Helpers.ToUri(x.Key), x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToArray());
+                .ToDictionary(x => Helpers.ToUri(x.Key),
+                    x => x.Select(Helpers.ToDiagnostic).Distinct(CachedDiagnosticComparer).ToArray());
 
-            if (!_lastUris.TryGetValue(document.Id, out var diagnosticUris))
+            if (!_lastUris.TryGetValue(document!.Id, out var diagnosticUris))
             {
-                _lastUris.Add(document.Id, diagnosticUris = new List<Uri>());
+                _lastUris.Add(document.Id, diagnosticUris = []);
             }
 
             diagnosticUris.AddRange(diagnosticsGroupedByFile.Keys);
@@ -105,15 +94,17 @@ namespace ShaderTools.LanguageServer
 
         private static readonly DiagnosticComparer CachedDiagnosticComparer = new();
 
-        private sealed class DiagnosticComparer : IEqualityComparer<OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic>
+        private sealed class
+            DiagnosticComparer : IEqualityComparer<OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic>
         {
-            public bool Equals(OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic x, OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic y)
+            public bool Equals(OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic x,
+                OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic y)
             {
                 return x.Code.Equals(y.Code)
-                    && x.Message == y.Message
-                    && x.Range == y.Range
-                    && x.Severity == y.Severity
-                    && x.Source == y.Source;
+                       && x.Message == y.Message
+                       && x.Range == y.Range
+                       && x.Severity == y.Severity
+                       && x.Source == y.Source;
             }
 
             public int GetHashCode(OmniSharp.Extensions.LanguageServer.Protocol.Models.Diagnostic obj)

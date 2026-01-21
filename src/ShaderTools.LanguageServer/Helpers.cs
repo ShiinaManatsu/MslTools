@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.Text;
 using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
+using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.NavigateTo;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Range = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
 
 namespace ShaderTools.LanguageServer
@@ -107,7 +109,7 @@ namespace ShaderTools.LanguageServer
 
         private static LinePosition ToLinePosition(Position position)
         {
-            return new LinePosition((int)position.Line, (int)position.Character);
+            return new LinePosition(position.Line, position.Character);
         }
 
         public static async Task FindSymbolsInDocumentAsync(
@@ -186,6 +188,29 @@ namespace ShaderTools.LanguageServer
         public static string ToLspLanguage(string language)
         {
             return language.ToLowerInvariant();
+        }
+
+        public static async Task<dynamic> GetConfigurationAsync<T>(
+            ILanguageServer server,
+            string key)
+        {
+            try
+            {                
+                var configuration = await server.Configuration
+                    .GetConfiguration(new ConfigurationItem { Section = "hlsl-client" })
+                    .ConfigureAwait(false);
+
+                key = key.Replace(".", ":");
+                return typeof(T) switch
+                {
+                    var type when type == typeof(bool) =>configuration.AsEnumerable().ToDictionary()[key] == "True",
+                    _ => configuration.AsEnumerable().ToDictionary()[key]
+                };
+            }
+            catch
+            {
+                return default(T);
+            }
         }
     }
 }

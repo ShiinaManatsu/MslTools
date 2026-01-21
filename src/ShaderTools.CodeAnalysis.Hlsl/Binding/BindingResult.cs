@@ -26,7 +26,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
             BoundRoot = boundRoot;
             _boundNodeFromSyntaxNode = boundNodeFromSyntaxNode;
             _binderFromBoundNode = binderFromBoundNode;
-            Diagnostics = [..diagnostics];
+            Diagnostics = [.. diagnostics];
         }
 
         public BoundNode GetBoundNode(SyntaxNode syntaxNode)
@@ -37,7 +37,10 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Binding
 
         public IEnumerable<T> GetBoundNodes<T>() where T : BoundNode
         {
-            return _binderFromBoundNode.Select(x => x.Key).OfType<T>();
+            return _binderFromBoundNode
+                //.AsParallel()
+                .Select(x => x.Key)
+                .OfType<T>();
         }
 
         public Binder GetBinder(SyntaxNode syntaxNode)

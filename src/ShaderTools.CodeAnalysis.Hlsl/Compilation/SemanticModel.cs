@@ -15,6 +15,7 @@ using ShaderTools.CodeAnalysis.Syntax;
 using ShaderTools.CodeAnalysis.Text;
 using System.Collections.Immutable;
 using Binder = ShaderTools.CodeAnalysis.Hlsl.Binding.Binder;
+using Microsoft.CodeAnalysis.Text;
 
 namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
 {
@@ -119,6 +120,23 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
                 .Select(x => (x.DeclaredType.Name, x.VariableSymbol.Name));
         }
 
+        public IEnumerable<VariableSymbol> GetVariableDeclarations()
+        {
+            var declaredVariables = _bindingResult.GetBoundNodes<BoundVariableDeclaration>();
+
+            var declaredMultiVariables = _bindingResult.GetBoundNodes<BoundMultipleVariableDeclarations>()
+                .SelectMany(x => x.VariableDeclarations);
+
+            return declaredVariables.Concat(declaredMultiVariables).Select(x => x.VariableSymbol).Distinct();
+        }
+
+        public IEnumerable<FunctionSymbol> GetFunctionDeclarations()
+        {
+            var declaredFunctions = _bindingResult.GetBoundNodes<BoundFunctionDefinition>();
+
+            return declaredFunctions.Select(x => x.FunctionSymbol).Distinct();
+        }
+
         public IEnumerable<(string, string)> GetConstantBufferByName(string name, bool filterInvisible = true)
         {
             return ((BoundCompilationUnit)_bindingResult.BoundRoot).Declarations
@@ -137,9 +155,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
                     if (declaringSyntaxNode is not VariableDeclaratorSyntax variableDeclaratorSyntax ||
                         variableDeclaratorSyntax.Annotations == null) continue;
                     foreach (var variable in from annotation in variableDeclaratorSyntax.Annotations.Annotations
-                             from variable in annotation.Declaration.Variables
-                             where filterInvisible
-                             select variable)
+                                             from variable in annotation.Declaration.Variables
+                                             where filterInvisible
+                                             select variable)
                     {
                         if (variable.Identifier.IsFirstTokenInMacroExpansion)
                         {
@@ -515,9 +533,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Compilation
         {
             var token = root.FindTokenContext(position);
             return (from n in token.Parent.AncestorsAndSelf().Cast<SyntaxNode>()
-                let bc = _bindingResult.GetBinder(n)
-                where bc != null
-                select n).FirstOrDefault();
+                    let bc = _bindingResult.GetBinder(n)
+                    where bc != null
+                    select n).FirstOrDefault();
         }
     }
 }

@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
+﻿using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.Completion;
 using ShaderTools.CodeAnalysis.Shared.Extensions;
+using System;
+using System.Collections.Immutable;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using CompletionItem = OmniSharp.Extensions.LanguageServer.Protocol.Models.CompletionItem;
 using CompletionList = OmniSharp.Extensions.LanguageServer.Protocol.Models.CompletionList;
 using CompletionTrigger = Microsoft.CodeAnalysis.Completion.CompletionTrigger;
@@ -47,21 +47,27 @@ namespace ShaderTools.LanguageServer.Handlers
                 trigger = CompletionTrigger.Invoke;
             }
 
-            var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token).ConfigureAwait(false);
-            if (completionList == null)
+            try
+            {
+                var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token).ConfigureAwait(false);
+                if (completionList == null)
+                {
+                    return new CompletionList();
+                }
+
+                var completionItems = completionList.Items
+                    .Select(x => ConvertCompletionItem(document, completionList.Rules, x))
+                    .ToArray();
+
+                return completionItems;
+            }
+            catch (Exception)
             {
                 return new CompletionList();
             }
-
-            var completionItems = completionList.Items
-                .AsParallel()
-                .Select(x => ConvertCompletionItem(document, x))
-                .ToArray();
-
-            return completionItems;
         }
 
-        private static CompletionItem ConvertCompletionItem(Document document, CodeAnalysis.Completion.CompletionItem item)
+        private static CompletionItem ConvertCompletionItem(Document document, Microsoft.CodeAnalysis.Completion.CompletionRules rules, CodeAnalysis.Completion.CompletionItem item)
         {
             var description = CommonCompletionItem.GetDescription(item);
 
@@ -100,6 +106,8 @@ namespace ShaderTools.LanguageServer.Handlers
                     Range = Helpers.ToRange(document.SourceText, item.Span)
                 },
                 Detail = detail,
+                CommitCharacters = rules.DefaultCommitCharacters.Select(x => x.ToString()).ToArray(),
+                //CommitCharacters = rules.CommitCharacterRules.Select(x => x.ToString()).ToArray(),
                 Documentation = documentation,
             };
         }

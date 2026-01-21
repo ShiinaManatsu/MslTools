@@ -26,8 +26,8 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
 
         public override async Task ProvideCompletionsAsync(CompletionContext context)
         {
-            var syntaxTree = (SyntaxTree) await context.Document.GetSyntaxTreeAsync(context.CancellationToken).ConfigureAwait(false);
-            var semanticModel = (SemanticModel) await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
+            var syntaxTree = (SyntaxTree) await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false);
+            var semanticModel = (SemanticModel) await context.Document.GetSemanticModelWithCachedAsync(context.CancellationToken).ConfigureAwait(false);            
 
             var position = syntaxTree.MapRootFilePosition(context.Position);
 

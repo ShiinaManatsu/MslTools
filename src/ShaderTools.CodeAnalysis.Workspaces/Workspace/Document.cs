@@ -27,6 +27,8 @@ namespace ShaderTools.CodeAnalysis
         private readonly HostLanguageServices _languageServices;
         private readonly AsyncLazy<SyntaxTreeBase> _lazySyntaxTree;
         private readonly AsyncLazy<SemanticModelBase> _lazySemanticModel;
+        private SemanticModelBase _cachedSemanticModel;
+        private SyntaxTreeBase _cachedSyntaxTree;
 
         /// <summary>
         /// Gets a unique string that identifies this file.  At this time,
@@ -50,13 +52,16 @@ namespace ShaderTools.CodeAnalysis
 
         public Workspace Workspace => _languageServices.WorkspaceServices.Workspace;
 
-        internal Document(HostLanguageServices languageServices, DocumentId documentId, SourceFile file)
+        internal Document(HostLanguageServices languageServices, DocumentId documentId, SourceFile file,
+            SemanticModelBase cachedSemanticModel = null, SyntaxTreeBase cachedSyntaxTree = null)
         {
             _languageServices = languageServices;
 
             Id = documentId;
             SourceText = file.Text;
             FilePath = file.FilePath;
+            _cachedSemanticModel = cachedSemanticModel;
+            _cachedSyntaxTree = cachedSyntaxTree;
 
             _lazySyntaxTree = new AsyncLazy<SyntaxTreeBase>(ct => Task.Run(() =>
             {
@@ -84,6 +89,33 @@ namespace ShaderTools.CodeAnalysis
 
         public Task<SyntaxTreeBase> GetSyntaxTreeAsync(CancellationToken cancellationToken)
         {
+            return _lazySyntaxTree.GetValueAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Get the syntax tree for this document, preferring cached results from previous document versions.
+        /// This method will return the cached syntax tree immediately if available, while triggering
+        /// computation of the new syntax tree in the background.
+        /// This is useful for scenarios like code completion where showing slightly stale results quickly
+        /// is better than waiting for the latest computation to complete.
+        /// </summary>
+        public Task<SyntaxTreeBase> GetSyntaxTreeWithCachedAsync(CancellationToken cancellationToken)
+        {
+            // If we have a cached syntax tree from a previous version, return it immediately
+            // while triggering the computation of the new one in the background
+            if (_cachedSyntaxTree != null)
+            {
+                // Start computing the new syntax tree in the background and update cache when done
+                _ = Task.Run(async () =>
+                {
+                    var newTree = await _lazySyntaxTree.GetValueAsync(cancellationToken);
+                    if (!cancellationToken.IsCancellationRequested)
+                        _cachedSyntaxTree = newTree;
+                }, cancellationToken);
+                return Task.FromResult(_cachedSyntaxTree);
+            }
+
+            // No cached tree available, wait for the new one
             return _lazySyntaxTree.GetValueAsync(cancellationToken);
         }
 
@@ -132,6 +164,41 @@ namespace ShaderTools.CodeAnalysis
             return await _lazySemanticModel.GetValueAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Get the semantic model for this document, preferring cached results from previous document versions.
+        /// This method will return the cached semantic model immediately if available, while triggering
+        /// computation of the new semantic model in the background.
+        /// This is useful for scenarios like code completion where showing slightly stale results quickly
+        /// is better than waiting for the latest computation to complete.
+        /// </summary>
+        public async Task<SemanticModelBase> GetSemanticModelWithCachedAsync(CancellationToken cancellationToken)
+        {
+            if (!SupportsSemanticModel)
+                return null;
+
+            var options = await GetOptionsAsync(cancellationToken).ConfigureAwait(false);
+
+            if (!options.GetOption(FeatureOnOffOptions.IntelliSense))
+                return null;
+
+            // If we have a cached semantic model from a previous version, return it immediately
+            // while triggering the computation of the new one in the background
+            if (_cachedSemanticModel != null)
+            {
+                // Start computing the new semantic model in the background and update cache when done
+                _ = Task.Run(async () =>
+                {
+                    var newModel = await _lazySemanticModel.GetValueAsync(cancellationToken);
+                    if (!cancellationToken.IsCancellationRequested)
+                        _cachedSemanticModel = newModel;
+                }, cancellationToken);
+                return _cachedSemanticModel;
+            }
+
+            // No cached model available, wait for the new one
+            return await _lazySemanticModel.GetValueAsync(cancellationToken);
+        }
+
         public Document WithId(DocumentId documentId)
         {
             return new Document(_languageServices, documentId, new SourceFile(SourceText, FilePath));
@@ -142,7 +209,31 @@ namespace ShaderTools.CodeAnalysis
         /// </summary>
         public Document WithText(SourceText newText)
         {
-            return new Document(_languageServices, Id, new SourceFile(newText, FilePath));
+            // Try to pass already computed results to the new document
+            SemanticModelBase cachedModel = null;
+            SyntaxTreeBase cachedTree = null;
+
+            if (_lazySemanticModel.TryGetValue(out var computedModel))
+            {
+                cachedModel = computedModel;
+            }
+            else if (_cachedSemanticModel != null)
+            {
+                // If current lazy hasn't computed yet, pass through the cached value from previous document
+                cachedModel = _cachedSemanticModel;
+            }
+
+            if (_lazySyntaxTree.TryGetValue(out var computedTree))
+            {
+                cachedTree = computedTree;
+            }
+            else if (_cachedSyntaxTree != null)
+            {
+                // If current lazy hasn't computed yet, pass through the cached value from previous document
+                cachedTree = _cachedSyntaxTree;
+            }
+
+            return new Document(_languageServices, Id, new SourceFile(newText, FilePath), cachedModel, cachedTree);
         }
 
         public Document WithFilePath(string filePath)

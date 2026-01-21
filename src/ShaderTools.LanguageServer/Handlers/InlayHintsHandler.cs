@@ -74,22 +74,7 @@ internal class InlayHintsHandler(
         if (await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) is not SemanticModel sm)
             return [];
 
-
-        var withType = false;
-        var configuration = await server.Configuration.GetConfiguration(new ConfigurationItem { Section = "hlsl-client" }).ConfigureAwait(false);
-
-        try
-        {
-            if (configuration.AsEnumerable().ToDictionary()["hlsl-client:language:inlayHints:withType"] == "True")
-            {
-                withType = true;
-            }
-        }
-        catch
-        {
-            // ignored
-        }
-
+        bool withType = await Helpers.GetConfigurationAsync<bool>(server, "hlsl-client.language.inlayHints.withType");
 
         var nodes = GetHintNodesRecursively(sm.BindingRoot, document, request.Range);
 

@@ -3,7 +3,7 @@
 	  <TargetFramework>net9.0-windows10.0.22000.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit" Version="2.9.3" />
     <ProjectReference Include="..\ShaderTools.CodeAnalysis.Workspaces\ShaderTools.CodeAnalysis.Workspaces.csproj" />
     <ProjectReference Include="..\ShaderTools.CodeAnalysis\ShaderTools.CodeAnalysis.csproj" />
   </ItemGroup>
