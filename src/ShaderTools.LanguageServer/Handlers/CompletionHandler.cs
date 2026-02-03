@@ -47,24 +47,17 @@ namespace ShaderTools.LanguageServer.Handlers
                 trigger = CompletionTrigger.Invoke;
             }
 
-            try
-            {
-                var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token).ConfigureAwait(false);
-                if (completionList == null)
-                {
-                    return new CompletionList();
-                }
-
-                var completionItems = completionList.Items
-                    .Select(x => ConvertCompletionItem(document, completionList.Rules, x))
-                    .ToArray();
-
-                return completionItems;
-            }
-            catch (Exception)
+            var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token).ConfigureAwait(false);
+            if (completionList == null)
             {
                 return new CompletionList();
             }
+
+            var completionItems = completionList.Items
+                .Select(x => ConvertCompletionItem(document, completionList.Rules, x))
+                .ToArray();
+
+            return completionItems;
         }
 
         private static CompletionItem ConvertCompletionItem(Document document, Microsoft.CodeAnalysis.Completion.CompletionRules rules, CodeAnalysis.Completion.CompletionItem item)

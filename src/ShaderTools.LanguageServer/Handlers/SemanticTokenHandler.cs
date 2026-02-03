@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -43,7 +44,8 @@ namespace ShaderTools.LanguageServer.Handlers
         public static readonly SemanticTokenModifier ModifierField = new SemanticTokenModifier("field");
         public static readonly SemanticTokenType TokenAnnotation = new SemanticTokenType("annotation");
 
-        public static readonly List<SemanticTokenModifier> AnnotationColors = new() {
+        public static readonly List<SemanticTokenModifier> AnnotationColors = new()
+        {
             new SemanticTokenModifier("colorRed"),
             new SemanticTokenModifier("colorBlue"),
             new SemanticTokenModifier("colorGreen"),
@@ -87,11 +89,13 @@ namespace ShaderTools.LanguageServer.Handlers
                 HlslClassificationTypeNames.ClassIdentifier => (SemanticTokenType.Class, []),
                 HlslClassificationTypeNames.StructIdentifier => (SemanticTokenType.Struct, []),
                 HlslClassificationTypeNames.InterfaceIdentifier => (SemanticTokenType.Interface, []),
-                HlslClassificationTypeNames.ConstantBufferVariableIdentifier => (SemanticTokenType.Variable, [ModifierGlobal]),
+                HlslClassificationTypeNames.ConstantBufferVariableIdentifier => (SemanticTokenType.Variable,
+                    [ModifierGlobal]),
                 HlslClassificationTypeNames.ConstantBufferIdentifier => (SemanticTokenType.Class, []),
                 HlslClassificationTypeNames.MacroIdentifier => (SemanticTokenType.Macro, []),
                 HlslClassificationTypeNames.ToggleIdentifier => (SemanticTokenType.Macro, []),
-                HlslClassificationTypeNames.AnnotationIdentifier => (TokenAnnotation, [AnnotationColors[(annoationColorSpinIndex++) % AnnotationColors.Count]]),
+                HlslClassificationTypeNames.AnnotationIdentifier => (TokenAnnotation,
+                    [AnnotationColors[(annoationColorSpinIndex++) % AnnotationColors.Count]]),
                 "Hlsl.AnnotationIdentifier_0" => (TokenAnnotation, [AnnotationColors[0]]),
                 "Hlsl.AnnotationIdentifier_1" => (TokenAnnotation, [AnnotationColors[1]]),
                 "Hlsl.AnnotationIdentifier_2" => (TokenAnnotation, [AnnotationColors[2]]),
@@ -117,7 +121,7 @@ namespace ShaderTools.LanguageServer.Handlers
             CancellationToken cancellationToken)
         {
             var document = _workspace.GetDocument(identifier.TextDocument.Uri);
-            var syntaxTree = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
+            var sm = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false);
             var classificationService = document?.LanguageServices.GetService<IClassificationService>();
 
             if (classificationService == null)
@@ -128,7 +132,7 @@ namespace ShaderTools.LanguageServer.Handlers
             var classifiedSpans = new List<ClassifiedSpan>();
 
             classificationService.AddSemanticClassifications(
-                syntaxTree,
+                sm,
                 new TextSpan(0, document.SourceText.Length),
                 _workspace,
                 classifiedSpans,
@@ -142,6 +146,7 @@ namespace ShaderTools.LanguageServer.Handlers
                 {
                     continue;
                 }
+
                 if (x.ClassificationType != ClassificationTypeNames.WhiteSpace)
                 {
                     var range = Helpers.ToRange(document.SourceText, x.TextSpan);

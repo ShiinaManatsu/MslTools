@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -72,6 +73,18 @@ internal class UnusedSymbolHandler(
         return nodes;
     }
 
+    private async Task<bool> IsSymbolUnusedAsync(SemanticModel sm, SyntaxNode node,
+        ISymbolSearchService symbolSearchService, CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        var symbol = sm.GetDeclaredSymbol(node);
+        cancellationToken.ThrowIfCancellationRequested();
+        if (symbol == null)
+            return false;
+        var usages = await symbolSearchService.FindUsagesAsync(sm, symbol, cancellationToken, includeIdentifierToken: true);
+        return usages.IsEmpty;
+    }
+
     public async Task<UnusedSymbolResponse> Handle(UnusedSymbolRequest request,
         CancellationToken cancellationToken)
     {
@@ -80,22 +93,27 @@ internal class UnusedSymbolHandler(
             "hlsl-client.experimental.greyOutUnusedDeclarations");
 
         if (!greyOutUnusedDeclarations)
-            return new UnusedSymbolResponse();        
-        
-        var document = workspace.GetDocument(request.Uri);
-
-        if (await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) is not SemanticModel sm)
             return new UnusedSymbolResponse();
+
+        var document = workspace.GetDocument(request.Uri);
+        var sm =
+            await document.GetSemanticModelAsync(cancellationToken)
+                .ConfigureAwait(false) as SemanticModel;
         var symbolSearchService = document.LanguageServices.GetService<ISymbolSearchService>();
 
         var nodes = GetNodesRecursively(sm.BindingRoot, document, request.Range)
             .Select(x => x.Node)
             .Distinct()
-            .Where(x =>
-            {
-                var symbol = sm.GetDeclaredSymbol(x);
-                return symbol != null && symbolSearchService.FindUsages(sm, symbol).Length <= 1;
-            })
+            .ToList();
+        cancellationToken.ThrowIfCancellationRequested();
+
+        var filtered = await nodes
+            .ToAsyncEnumerable()
+            .Where(async (x, ct) => await IsSymbolUnusedAsync(sm, x, symbolSearchService, cancellationToken).ConfigureAwait(false))
+            .ToListAsync(cancellationToken)
+            .ConfigureAwait(false);
+        cancellationToken.ThrowIfCancellationRequested();
+        var result = filtered
             .Select(x => x is VariableDeclaratorSyntax ? x.Parent : x)
             .Where(x => x is VariableDeclarationSyntax or FunctionDefinitionSyntax)
             .Select(x => x.GetTextSpanRoot())
@@ -106,10 +124,10 @@ internal class UnusedSymbolHandler(
                 Range = Helpers.ToRange(document.SourceText, x.Value.Span)
             })
             .ToList();
-
+        cancellationToken.ThrowIfCancellationRequested();
         return new UnusedSymbolResponse
         {
-            Ranges = nodes
+            Ranges = result
         };
     }
 }

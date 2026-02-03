@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using OmniSharp.Extensions.LanguageServer.Protocol.Models;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.Hlsl.Syntax;
 using ShaderTools.CodeAnalysis.Structure;
+using Range = OmniSharp.Extensions.LanguageServer.Protocol.Models.Range;
 
 namespace ShaderTools.LanguageServer.Handlers
 {
@@ -41,7 +43,8 @@ namespace ShaderTools.LanguageServer.Handlers
                 return [];
 
             var folds = await GetDirectiveFolds(document, cancellationToken).ConfigureAwait(false);
-            var blockSpans = await blockStructureProvider.ProvideBlockStructureAsync(document, cancellationToken).ConfigureAwait(false);
+            var blockSpans = await blockStructureProvider.ProvideBlockStructureAsync(document, cancellationToken)
+                .ConfigureAwait(false);
 
             var r = blockSpans
                 .Select(x => (Range: Helpers.ToRange(document.SourceText, x.TextSpan), x.BannerText))

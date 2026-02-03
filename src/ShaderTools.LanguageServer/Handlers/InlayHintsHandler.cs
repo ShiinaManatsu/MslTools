@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -69,16 +70,10 @@ internal class InlayHintsHandler(
     public async Task<InlayHintContainer> Handle(InlayHintParams request, CancellationToken cancellationToken)
     {
         var document = workspace.GetDocument(request.TextDocument.Uri);
-
-
-        if (await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) is not SemanticModel sm)
-            return [];
-
-        bool withType = await Helpers.GetConfigurationAsync<bool>(server, "hlsl-client.language.inlayHints.withType");
-
-        var nodes = GetHintNodesRecursively(sm.BindingRoot, document, request.Range);
-
-        var hints = nodes
+        var sm = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) as SemanticModel;
+        bool withType =
+            await Helpers.GetConfigurationAsync<bool>(server, "hlsl-client.language.inlayHints.withType");
+        var hints = GetHintNodesRecursively(sm.BindingRoot, document, request.Range)
             .DistinctBy(x => x.Node)
             .SelectMany(x =>
                 sm.GetBoundNode(x.Node, withType)

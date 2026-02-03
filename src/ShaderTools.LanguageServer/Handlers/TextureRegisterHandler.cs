@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -35,10 +36,8 @@ internal class TextureRegisterHandler(
         CancellationToken cancellationToken)
     {
         var document = workspace.GetDocument(request.Uri);
-
         var result = new TextureRegisterResponse();
-        if (await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) is not SemanticModel sm)
-            return result;
+        var sm = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) as SemanticModel;
 
         foreach (var declaration in sm.GetLocalTextures())
         {

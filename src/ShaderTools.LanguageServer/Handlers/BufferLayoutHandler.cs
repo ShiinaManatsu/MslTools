@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,10 +36,7 @@ internal class BufferLayoutHandler(
         CancellationToken cancellationToken)
     {
         var document = workspace.GetDocument(request.Uri);
-
-        if (await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) is not SemanticModel sm)
-            return new BufferLayoutResponse();
-
+        var sm = await document.GetSemanticModelAsync(cancellationToken).ConfigureAwait(false) as SemanticModel;
         var variables =
             await Task.Run(
                     () => sm.GetConstantBufferByName("Shader", filterInvisible: false)
@@ -47,6 +45,6 @@ internal class BufferLayoutHandler(
                 .ConfigureAwait(false);
 
         return new BufferLayoutResponse
-            { Variables = variables };
+        { Variables = variables };
     }
 }
