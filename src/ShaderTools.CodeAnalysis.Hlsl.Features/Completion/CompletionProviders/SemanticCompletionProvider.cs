@@ -23,7 +23,9 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
 
         public override async Task ProvideCompletionsAsync(CompletionContext context)
         {
-            var syntaxTree = await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false);
+            var syntaxTree = context.QuickCompletion ?
+                (SyntaxTree)await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false) :
+                (SyntaxTree)await context.Document.GetSyntaxTreeAsync(context.CancellationToken).ConfigureAwait(false);
             var sourceLocation = syntaxTree.MapRootFilePosition(context.Position);
             var token = ((SyntaxNode) syntaxTree.Root).FindTokenOnLeft(sourceLocation);
 

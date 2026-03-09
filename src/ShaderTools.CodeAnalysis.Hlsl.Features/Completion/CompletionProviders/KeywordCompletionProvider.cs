@@ -22,11 +22,13 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
 
         public override async Task ProvideCompletionsAsync(CompletionContext context)
         {
-            var syntaxTree = (SyntaxTree) await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false);
+            var syntaxTree = context.QuickCompletion ?
+                (SyntaxTree)await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false) :
+                (SyntaxTree)await context.Document.GetSyntaxTreeAsync(context.CancellationToken).ConfigureAwait(false);
 
             var sourceLocation = syntaxTree.MapRootFilePosition(context.Position);
 
-            var availableKeywords = GetAvailableKeywords(syntaxTree, sourceLocation);
+            var availableKeywords = GetAvailableKeywords(syntaxTree, sourceLocation, quickCompletion: context.QuickCompletion);
 
             foreach (var keyword in availableKeywords)
             {
@@ -49,7 +51,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
             return propertyAccess != null && (propertyAccess.DotToken == token || propertyAccess.Name == token);
         }
 
-        private static IEnumerable<SyntaxKind> GetAvailableKeywords(SyntaxTree syntaxTree, SourceLocation position)
+        private static IEnumerable<SyntaxKind> GetAvailableKeywords(SyntaxTree syntaxTree, SourceLocation position, bool quickCompletion = false)
         {
             var isInNonUserCode = ((SyntaxNode) syntaxTree.Root).InNonUserCode(position);
             if (isInNonUserCode)
@@ -65,7 +67,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
 
             var isPreprocessorKeywordContext = isPreprocessorDirectiveContext && syntaxTree.IsPreprocessorKeywordContext(position, leftToken);
 
-            var isStatementContext = !isPreprocessorDirectiveContext && targetToken.IsBeginningOfStatementContext();
+            var isStatementContext = !isPreprocessorDirectiveContext && targetToken.IsBeginningOfStatementContext() || quickCompletion;
 
             var isSemanticContext = !isPreprocessorDirectiveContext && leftToken.HasAncestor<SemanticSyntax>();
 

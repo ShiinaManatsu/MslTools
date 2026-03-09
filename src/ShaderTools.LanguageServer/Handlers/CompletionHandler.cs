@@ -1,6 +1,7 @@
 ﻿using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
 using OmniSharp.Extensions.LanguageServer.Protocol.Document;
 using OmniSharp.Extensions.LanguageServer.Protocol.Models;
+using OmniSharp.Extensions.LanguageServer.Protocol.Server;
 using ShaderTools.CodeAnalysis;
 using ShaderTools.CodeAnalysis.Completion;
 using ShaderTools.CodeAnalysis.Shared.Extensions;
@@ -19,8 +20,9 @@ namespace ShaderTools.LanguageServer.Handlers
     {
         private readonly LanguageServerWorkspace _workspace;
         private readonly CompletionRegistrationOptions _registrationOptions;
+        private readonly ILanguageServer _server;
 
-        public CompletionHandler(LanguageServerWorkspace workspace, TextDocumentSelector documentSelector)
+        public CompletionHandler(LanguageServerWorkspace workspace, ILanguageServer server, TextDocumentSelector documentSelector)
         {
             _workspace = workspace;
             _registrationOptions = new CompletionRegistrationOptions
@@ -29,6 +31,7 @@ namespace ShaderTools.LanguageServer.Handlers
                 TriggerCharacters = new Container<string>(".", ":", " ", "#", "+", "-", "*", "/", ",", "<", "("),
                 ResolveProvider = false
             };
+            _server = server;
         }
 
         public async Task<CompletionList> Handle(CompletionParams request, CancellationToken token)
@@ -47,7 +50,11 @@ namespace ShaderTools.LanguageServer.Handlers
                 trigger = CompletionTrigger.Invoke;
             }
 
-            var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token).ConfigureAwait(false);
+            bool quickCompletion = await Helpers.GetConfigurationAsync<bool>(
+                _server,
+                "hlsl-client.experimental.quickCompletion");
+
+            var completionList = await completionService.GetCompletionsAsync(document, position, trigger, cancellationToken: token, quickCompletion: quickCompletion).ConfigureAwait(false);
             if (completionList == null)
             {
                 return new CompletionList();

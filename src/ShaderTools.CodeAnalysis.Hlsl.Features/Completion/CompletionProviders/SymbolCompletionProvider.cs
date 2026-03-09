@@ -26,20 +26,24 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
 
         public override async Task ProvideCompletionsAsync(CompletionContext context)
         {
-            var syntaxTree = (SyntaxTree) await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false);
-            var semanticModel = (SemanticModel) await context.Document.GetSemanticModelWithCachedAsync(context.CancellationToken).ConfigureAwait(false);            
+            var syntaxTree = context.QuickCompletion ?
+                (SyntaxTree)await context.Document.GetSyntaxTreeWithCachedAsync(context.CancellationToken).ConfigureAwait(false) :
+                (SyntaxTree)await context.Document.GetSyntaxTreeAsync(context.CancellationToken).ConfigureAwait(false);
+            var semanticModel = context.QuickCompletion ?
+                (SemanticModel)await context.Document.GetSemanticModelWithCachedAsync(context.CancellationToken).ConfigureAwait(false) :
+                (SemanticModel)await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
 
             var position = syntaxTree.MapRootFilePosition(context.Position);
 
             // We don't want to show a completions for these cases.
-            if (syntaxTree.PossiblyInUserGivenName(position) || 
-                syntaxTree.DefinitelyInMacro(position) || 
+            if (syntaxTree.PossiblyInUserGivenName(position) ||
+                syntaxTree.DefinitelyInMacro(position) ||
                 syntaxTree.DefinitelyInVariableDeclaratorQualifier(position))
             {
                 return;
             }
 
-            var root = (SyntaxNode) syntaxTree.Root;
+            var root = (SyntaxNode)syntaxTree.Root;
 
             // Comments and literals don't get completion information
             if (root.InComment(position) || root.InLiteral(position))
@@ -79,7 +83,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
                 .Where(x => !(x is AttributeSymbol))
                 .Where(x => x.Locations.Length == 0 || x.Locations.Any(l => l.End < position));
 
-            if (!((SyntaxTree) semanticModel.SyntaxTree).PossiblyInTypeName(position))
+            if (!((SyntaxTree)semanticModel.SyntaxTree).PossiblyInTypeName(position))
                 symbols = symbols.Where(x => !(x is TypeSymbol));
 
             CreateSymbolCompletions(symbols.Cast<Symbol>(), context);
@@ -102,7 +106,7 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
         internal static FieldAccessExpressionSyntax GetPropertyAccessExpression(SyntaxNode root, SourceLocation position)
         {
             var token = root.FindTokenOnLeft(position);
-            var previous = (SyntaxToken) token.GetPreviousToken(false, true);
+            var previous = (SyntaxToken)token.GetPreviousToken(false, true);
             var dot = previous != null && previous.Kind == SyntaxKind.DotToken
                 ? previous
                 : token;
@@ -136,8 +140,8 @@ namespace ShaderTools.CodeAnalysis.Hlsl.Completion.CompletionProviders
             if (!hasNonInvocables)
                 return CreateInvocableCompletionGroup(symbols);
 
-            if (symbols.All(s => (s is TypeSymbol && ((TypeSymbol) s).IsIntrinsicNumericType())
-                                 || (s is FunctionSymbol && ((FunctionSymbol) s).IsNumericConstructor)))
+            if (symbols.All(s => (s is TypeSymbol && ((TypeSymbol)s).IsIntrinsicNumericType())
+                                 || (s is FunctionSymbol && ((FunctionSymbol)s).IsNumericConstructor)))
                 return CreateSymbolCompletion(symbols.First(s => s is TypeSymbol));
 
             var description = ImmutableArray.CreateBuilder<SymbolMarkupToken>();

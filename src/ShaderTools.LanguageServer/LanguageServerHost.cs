@@ -87,7 +87,6 @@ namespace ShaderTools.LanguageServer
                 .AddHandler("messiah/unrealMapping", new UnrealMappingHandler(_workspace, documentSelector))
                 .AddHandler("messiah/bufferLayout", new BufferLayoutHandler(_workspace, documentSelector))                
                 .AddHandler(new TextDocumentSyncHandler(_workspace, documentSelector))
-                .AddHandler(new CompletionHandler(_workspace, documentSelector))
                 .AddHandler(new DefinitionHandler(_workspace, documentSelector))
                 .AddHandler(new FoldingRangeHandler(_workspace, documentSelector))
                 .AddHandler(new WorkspaceSymbolsHandler(_workspace))
@@ -99,6 +98,7 @@ namespace ShaderTools.LanguageServer
 
             _server.Register(x => x.AddHandler(new InlayHintsHandler(_workspace, _server, documentSelector)));
             _server.Register(x => x.AddHandler("messiah/unusedVariables", new UnusedSymbolHandler(_workspace, _server,documentSelector)));
+            _server.Register(x => x.AddHandler(new CompletionHandler(_workspace, _server,documentSelector)));
 
             var diagnosticService = _workspace.Services.GetService<IDiagnosticService>();
             _diagnosticNotifier = new DiagnosticNotifier(_server, diagnosticService);

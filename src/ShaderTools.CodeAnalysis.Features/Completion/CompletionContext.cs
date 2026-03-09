@@ -20,6 +20,8 @@ namespace ShaderTools.CodeAnalysis.Completion
 
         internal CompletionProvider Provider { get; }
 
+        public bool QuickCompletion { get;set; } = false;
+
         /// <summary>
         /// The document that completion was invoked within.
         /// </summary>

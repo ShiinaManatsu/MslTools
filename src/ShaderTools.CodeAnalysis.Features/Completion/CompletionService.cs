@@ -80,7 +80,7 @@ namespace ShaderTools.CodeAnalysis.Completion
             if (_importedProviders == null)
             {
                 var language = this.Language;
-                var mefExporter = (IMefHostExportProvider) _workspace.Services.HostServices;
+                var mefExporter = (IMefHostExportProvider)_workspace.Services.HostServices;
 
                 var providers = ExtensionOrderer.Order(
                     mefExporter.GetExports<CompletionProvider, OrderableLanguageMetadata>()
@@ -155,7 +155,8 @@ namespace ShaderTools.CodeAnalysis.Completion
             int caretPosition,
             CompletionTrigger trigger,
             OptionSet options = null,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default,
+            bool quickCompletion = false)
         {
             var text = document.SourceText;
             var defaultItemSpan = this.GetDefaultCompletionListSpan(text, caretPosition);
@@ -189,7 +190,7 @@ namespace ShaderTools.CodeAnalysis.Completion
             var triggeredCompletionContexts = await ComputeNonEmptyCompletionContextsAsync(
                 document, caretPosition, trigger, options,
                 defaultItemSpan, triggeredProviders,
-                cancellationToken).ConfigureAwait(false);
+                cancellationToken, quickCompletion: quickCompletion).ConfigureAwait(false);
 
             // If we didn't even get any back with items, then there's nothing to do.
             // i.e. if only got items back that had only suggestion items, then we don't
@@ -246,14 +247,15 @@ namespace ShaderTools.CodeAnalysis.Completion
             Document document, int caretPosition, CompletionTrigger trigger,
             OptionSet options, TextSpan defaultItemSpan,
             ImmutableArray<CompletionProvider> providers,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            bool quickCompletion = false)
         {
             var completionContextTasks = new List<Task<CompletionContext>>();
             foreach (var provider in providers)
             {
                 completionContextTasks.Add(GetContextAsync(
                     provider, document, caretPosition, trigger,
-                    options, defaultItemSpan, cancellationToken));
+                    options, defaultItemSpan, cancellationToken, quickCompletion: quickCompletion));
             }
 
             var completionContexts = await Task.WhenAll(completionContextTasks).ConfigureAwait(false);
@@ -369,7 +371,8 @@ namespace ShaderTools.CodeAnalysis.Completion
             CompletionTrigger triggerInfo,
             OptionSet options,
             TextSpan? defaultSpan,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken,
+            bool quickCompletion = false)
         {
             options = options ?? document.Workspace.Options;
 
@@ -379,7 +382,7 @@ namespace ShaderTools.CodeAnalysis.Completion
                 defaultSpan = this.GetDefaultCompletionListSpan(text, position);
             }
 
-            var context = new CompletionContext(provider, document, position, defaultSpan.Value, triggerInfo, options, cancellationToken);
+            var context = new CompletionContext(provider, document, position, defaultSpan.Value, triggerInfo, options, cancellationToken) { QuickCompletion = quickCompletion };
             await provider.ProvideCompletionsAsync(context).ConfigureAwait(false);
             return context;
         }
